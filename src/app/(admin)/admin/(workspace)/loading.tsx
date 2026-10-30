@@ -1,1 +1,2 @@
-export default function Loading() { return <div className="notice" role="status" aria-busy="true">Opening your workspace…</div>; }
+import { LoadingState } from "@/components/ui/LoadingState";
+export default function Loading() { return <LoadingState label="Opening your workspace…" />; }

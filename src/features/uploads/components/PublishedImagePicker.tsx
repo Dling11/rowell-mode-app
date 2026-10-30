@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { uploadsApi } from "../api/uploads-api";
 import { QueryState } from "@/components/ui/QueryState";
 import styles from "./MediaLibrary.module.css";
@@ -27,7 +27,7 @@ export function PublishedImagePicker({
         </Link>
       </p>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />

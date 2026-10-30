@@ -94,7 +94,7 @@ export function ResourceEditor({
       <details className={styles.history}>
         <summary>Saved link history</summary>
         <QueryState
-          loading={history.isLoading}
+          loading={history.isLoading} fetching={history.isFetching}
           error={history.error}
           retry={history.refetch}
         />

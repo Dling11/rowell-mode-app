@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import {
@@ -27,6 +28,7 @@ function SettingsForm({ data }: { data: SettingsData }) {
       toast.success("Site controls saved");
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     }
   }
@@ -122,9 +124,9 @@ function SettingsForm({ data }: { data: SettingsData }) {
             {error}
           </p>
         )}
-        <button className="button" disabled={!dirty || isLoading}>
+        <ActionButton pending={isLoading} className="button" disabled={!dirty || isLoading}>
           Save site controls
-        </button>
+        </ActionButton>
       </form>
       <UnsavedChangesGuard dirty={dirty} />
       <ConfirmDialog
@@ -152,7 +154,7 @@ export function SettingsWorkspace() {
         </p>
       </div>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />

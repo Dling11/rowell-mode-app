@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { dashboardApi } from "@/features/dashboard/api/dashboard-api";
 import { QueryState } from "@/components/ui/QueryState";
 import styles from "@/components/workspace/Workspace.module.css";
@@ -13,7 +13,7 @@ export function Overview() {
         <p>Keep the private bits private. Share progress when it’s ready.</p>
       </div>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />

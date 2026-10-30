@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { Layers3, Monitor, Smartphone } from "lucide-react";
 import styles from "./DownloadsDirectory.module.css";
 

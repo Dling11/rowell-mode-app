@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ImagePlus } from "lucide-react";
 import { uploadsApi } from "../api/uploads-api";
 import { QueryState } from "@/components/ui/QueryState";
@@ -23,7 +23,7 @@ export function MediaLibrary() {
         want to share.
       </p>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />

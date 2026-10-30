@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ArrowLeft } from "lucide-react";
 import { getPublicUpdate } from "@/server/db/updates";
 import styles from "@/app/(site)/updates/page.module.css";

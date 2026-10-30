@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import {
   Code2 as Github,
   Video as Youtube,
@@ -10,6 +10,7 @@ import { creator } from "@/data/projects";
 import { site } from "@/data/site";
 import { BrandMark } from "@/components/layout/BrandMark";
 import styles from "@/components/layout/Shell.module.css";
+import { MotionControl } from "@/features/appearance/components/MotionControl";
 
 export function Footer() {
   return (
@@ -43,6 +44,7 @@ export function Footer() {
       <div className={`container ${styles.footerBottom}`}>
         <span>© {new Date().getFullYear()} Rowell / Nikushimi</span>
         <span>A personal corner of the internet.</span>
+        <MotionControl />
         <Link
           href="/admin"
           prefetch={false}

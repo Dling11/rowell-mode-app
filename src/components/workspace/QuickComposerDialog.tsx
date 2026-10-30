@@ -4,7 +4,6 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { StoreProvider } from "@/store/StoreProvider";
-import { ToastProvider } from "@/components/ui/ToastProvider";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { UnsavedChangesGuard } from "@/components/ui/UnsavedChangesGuard";
 import { QuickNoteForm } from "@/features/notes/components/QuickNoteForm";
@@ -98,7 +97,6 @@ export function QuickComposerDialog({
         onConfirm={onClose}
       />
       <UnsavedChangesGuard dirty={state.dirty || state.busy} />
-      <ToastProvider />
     </StoreProvider>
   );
 }

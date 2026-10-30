@@ -1,0 +1,78 @@
+.spinner {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+.busy { cursor: progress; }
+.busy > svg { display: none; }
+.navigation {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  pointer-events: none;
+}
+.track {
+  height: 3px;
+  overflow: hidden;
+  background: #8fafd126;
+}
+.beam {
+  display: block;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--highlight), var(--blue));
+  box-shadow: 0 0 15px #8fafd180;
+  animation: travel 1.25s ease-in-out infinite;
+}
+.pill {
+  position: absolute;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: calc(100% - 32px);
+  padding: 12px 19px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--highlight);
+  background: #111c2df5;
+  box-shadow: 0 10px 35px #0005;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.loading {
+  padding-block: 54px;
+  min-width: 0;
+}
+.heading { display: flex; align-items: center; gap: 12px; color: var(--highlight); }
+.heading p { font-size: 14px; }
+.skeletons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 30px; }
+.skeleton {
+  height: 240px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(110deg, var(--surface) 25%, var(--surface-raised) 45%, var(--surface) 65%);
+  background-size: 250% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+.inline { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes travel { from { transform: translateX(-100%); } to { transform: translateX(350%); } }
+@keyframes shimmer { to { background-position: -250% 0; } }
+@media (max-width: 680px) {
+  .skeletons { grid-template-columns: 1fr; gap: 16px; }
+  .skeleton { height: 160px; }
+  .skeleton:last-child { display: none; }
+  .loading { padding-block: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(html:not([data-motion="full"])) .spinner { border-style: dotted; }
+  :global(html:not([data-motion="full"])) .beam { width: 100%; background: var(--blue); }
+}

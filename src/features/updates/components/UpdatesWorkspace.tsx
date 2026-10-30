@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Plus, Radio, Save } from "lucide-react";
@@ -64,6 +65,7 @@ export function UpdatesWorkspace() {
       toast.success(publish ? "Update published" : "Draft saved");
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setAction(null);
     }
   }
@@ -84,6 +86,7 @@ export function UpdatesWorkspace() {
         toast.success("Update deleted");
       } catch (err) {
         setError(errorMessage(err));
+        toast.error(errorMessage(err));
         setAction(null);
       }
     } else await submit(action === "publish");
@@ -99,7 +102,7 @@ export function UpdatesWorkspace() {
         </p>
       </div>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />
@@ -218,7 +221,7 @@ export function UpdatesWorkspace() {
             </p>
           )}
           <div className={styles.actions}>
-            <button
+            <ActionButton pending={saving && !action}
               className="button secondary"
               disabled={
                 busy || !dirty || !draft.title.trim() || !draft.body.trim()
@@ -226,7 +229,7 @@ export function UpdatesWorkspace() {
             >
               <Save size={15} />
               {selected?.publishedAt ? "Save published changes" : "Save draft"}
-            </button>
+            </ActionButton>
             {!selected?.publishedAt && (
               <button
                 type="button"

@@ -1,9 +1,9 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ArrowLeft, ArrowRight, Camera, Images } from "lucide-react";
 import type { PublicPhoto } from "@/features/uploads/model/schema";
 import styles from "./PhotoGallery.module.css";
+import { PhotoGrid } from "./PhotoGrid";
 
 export function PhotoGallery({
   photos,
@@ -52,38 +52,7 @@ export function PhotoGallery({
           </Link>
         </div>
       ) : photos.length ? (
-        <div className={styles.grid}>
-          {photos.map((photo, index) => (
-            <figure className={styles.photo} key={photo.id}>
-              <div className={styles.frame}>
-                <Image
-                  src={`/media/${photo.id}`}
-                  alt={photo.alt}
-                  width={1200}
-                  height={1200}
-                  unoptimized
-                  loading="lazy"
-                />
-              </div>
-              <figcaption>
-                <span className={styles.number}>
-                  {String((page - 1) * 18 + index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  {photo.caption && <p>{photo.caption}</p>}
-                  <time dateTime={photo.publishedAt}>
-                    {new Date(photo.publishedAt).toLocaleDateString("en", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      timeZone: "UTC",
-                    })}
-                  </time>
-                </div>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <PhotoGrid photos={photos} page={page} />
       ) : (
         <div className={styles.empty}>
           <span className={styles.emptyArt}>

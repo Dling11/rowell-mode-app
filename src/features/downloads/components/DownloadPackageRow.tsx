@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import {
   ArrowDownToLine,
   ArrowUpRight,
@@ -14,6 +14,7 @@ import {
   type SitePolicy,
 } from "@/features/site-settings/model/policy";
 import styles from "./DownloadsDirectory.module.css";
+import { DownloadLink } from "./DownloadLink";
 
 export function DownloadPackageRow({
   project,
@@ -102,14 +103,14 @@ export function DownloadPackageRow({
           View project
         </Link>
       ) : allowed ? (
-        <a
+        <DownloadLink
           className={`button ${styles.action}`}
           href={`/download/${project.id}/${platform}`}
           aria-label={`Download ${project.name} for ${platform === "android" ? "Android" : "Windows"}`}
         >
           <ArrowDownToLine size={16} />
           Download
-        </a>
+        </DownloadLink>
       ) : (
         <button
           className={`button secondary ${styles.action}`}

@@ -5,6 +5,9 @@ import Image from "next/image";
 import { Fingerprint, LogIn, LockKeyhole, Play } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 import { PinPad } from "./PinPad";
+import { ActionButton } from "@/components/ui/ActionButton";
+import { queueSignInNotice } from "../lib/owner-notice";
+import { toast } from "sonner";
 import {
   useWelcomeMotion,
   type WelcomeMotion,
@@ -46,6 +49,7 @@ export function OwnerSignIn({
   destination?: "/admin" | "/install" | "/gallery" | "/updates";
 }) {
   const [busy, setBusy] = useState(false);
+  const [passkeyPending, setPasskeyPending] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"password" | "pin">("password");
   const [pin, setPin] = useState("");
@@ -66,6 +70,7 @@ export function OwnerSignIn({
   );
   const enterWorkspace = useCallback(() => {
     // A fresh request picks up the new authenticated session and avoids stale route data.
+    queueSignInNotice();
     window.location.replace(destination);
   }, [destination]);
   const closePreview = useCallback(() => setPreview(false), []);
@@ -74,18 +79,22 @@ export function OwnerSignIn({
     setPin("");
     setWelcome(true);
   }
+  function reportError(message: string) {
+    setError(message);
+    toast.error(message, { id: "owner-sign-in-error" });
+  }
   async function signIn(username: string, password: string) {
     setBusy(true);
     setError("");
     try {
       const result = await authClient.signIn.username({ username, password });
       if (result.error)
-        setError(
+        reportError(
           "Sign-in failed. Check your credentials or try again shortly.",
         );
       else success();
     } catch {
-      setError("Sign-in is temporarily unavailable. Please try again.");
+      reportError("Sign-in is temporarily unavailable. Please try again.");
     } finally {
       setBusy(false);
     }
@@ -101,32 +110,34 @@ export function OwnerSignIn({
         body: JSON.stringify({ pin }),
       });
       if (!response.ok)
-        setError(
+        reportError(
           response.status === 429
             ? "Too many attempts. Please wait before trying again."
             : "PIN sign-in failed. Check your PIN or try again shortly.",
         );
       else success();
     } catch {
-      setError("Sign-in is temporarily unavailable. Please try again.");
+      reportError("Sign-in is temporarily unavailable. Please try again.");
     } finally {
       setBusy(false);
     }
   }
   async function usePasskey() {
     setBusy(true);
+    setPasskeyPending(true);
     setError("");
     try {
       const result = await authClient.signIn.passkey();
       if (result.error)
-        setError(
+        reportError(
           "Passkey sign-in didn’t finish. Try again or use your password.",
         );
       else success();
     } catch {
-      setError("Passkey sign-in didn’t finish. You can use your password.");
+      reportError("Passkey sign-in didn’t finish. You can use your password.");
     } finally {
       setBusy(false);
+      setPasskeyPending(false);
     }
   }
   return (
@@ -204,21 +215,21 @@ export function OwnerSignIn({
             {error}
           </p>
         )}
-        <button
+        <ActionButton pending={busy && !passkeyPending}
           className="button"
           disabled={!configured || blocked || (mode === "pin" && !pin)}
         >
           {mode === "pin" ? <LockKeyhole size={17} /> : <LogIn size={17} />}{" "}
-          {busy ? "Signing in…" : mode === "pin" ? "Unlock" : "Sign in"}
-        </button>
-        <button
+          {busy && !passkeyPending ? "Signing in…" : mode === "pin" ? "Unlock" : "Sign in"}
+        </ActionButton>
+        <ActionButton pending={passkeyPending}
           type="button"
           className="button secondary"
           onClick={usePasskey}
           disabled={!configured || blocked || !passkeys}
         >
-          <Fingerprint size={19} /> Use a passkey
-        </button>
+          <Fingerprint size={19} /> {passkeyPending ? "Waiting for your device…" : "Use a passkey"}
+        </ActionButton>
         <p className={styles.hint}>
           Add a passkey after signing in to use your fingerprint, device PIN or
           security key.

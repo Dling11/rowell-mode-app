@@ -26,6 +26,8 @@ code { overflow-wrap: anywhere; }
 .button:hover { background: var(--highlight); transform: translateY(-1px); }
 .button.secondary { background: transparent; border-color: var(--border); color: var(--text); }
 .button.secondary:hover { background: var(--surface-raised); border-color: var(--blue); }
+button:not(:disabled):active, a:active { opacity: .78; }
+.button:not(:disabled):active { transform: translateY(1px); }
 .button.danger { background: #af6071; color: white; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--blue); font-size: 13px; }
 .text-link:hover { color: var(--highlight); }
@@ -44,4 +46,9 @@ code { overflow-wrap: anywhere; }
 .error-text { color: #f1a9b7; font-size: 13px; }
 @media (max-width: 768px) { .container { width: calc(100% - 40px); } .page-intro { padding-top: 46px; } }
 @media (max-width: 360px) { .container { width: calc(100% - 32px); } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *,*::before,*::after { animation: none !important; transition: none !important; } }
+html[data-motion="reduced"] { scroll-behavior: auto; }
+html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) { scroll-behavior: auto; }
+  html:not([data-motion="full"]) *, html:not([data-motion="full"]) *::before, html:not([data-motion="full"]) *::after { animation: none !important; transition: none !important; }
+}

@@ -1,6 +1,9 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { usePathname, useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { authClient } from "@/features/auth/lib/auth-client";
 import {
   LayoutDashboard,
@@ -18,10 +21,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { adminApi } from "@/store/api";
 import { clearUploads } from "@/features/uploads/model/upload-slice";
-import { ToastProvider } from "@/components/ui/ToastProvider";
 import { site } from "@/data/site";
 import { BrandMark } from "@/components/layout/BrandMark";
 import styles from "@/components/workspace/Workspace.module.css";
+import { MotionControl } from "@/features/appearance/components/MotionControl";
 
 const nav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -42,6 +45,8 @@ export function WorkspaceShell({
 }) {
   const path = usePathname();
   const router = useRouter();
+  const [signingOut, setSigningOut] = useState(false);
+  const [navigating, startNavigation] = useTransition();
   const dispatch = useAppDispatch();
   const activeUploads = useAppSelector(
     (state) =>
@@ -64,12 +69,19 @@ export function WorkspaceShell({
     </nav>
   );
   async function logout() {
-    dispatch(adminApi.util.resetApiState());
-    dispatch(clearUploads());
-    const result = await authClient.signOut();
-    if (!result.error) {
-      router.replace("/admin/login");
-      router.refresh();
+    if (signingOut || navigating) return;
+    setSigningOut(true);
+    try {
+      const result = await authClient.signOut();
+      if (result.error) throw new Error("Sign-out failed");
+      dispatch(adminApi.util.resetApiState());
+      dispatch(clearUploads());
+      toast.success("Signed out. Your workspace is locked.", { id: "owner-signed-out" });
+      startNavigation(() => { router.replace("/admin/login"); router.refresh(); });
+    } catch {
+      toast.error("Couldn’t sign out. Please try again.");
+    } finally {
+      setSigningOut(false);
     }
   }
   return (
@@ -91,9 +103,9 @@ export function WorkspaceShell({
           >
             <span>View site</span> <ArrowUpRight size={14} />
           </Link>
-          <button aria-label="Sign out" data-leaves-workspace onClick={logout}>
+          <ActionButton pending={signingOut || navigating} aria-label="Sign out" data-leaves-workspace onClick={logout}>
             <LogOut size={17} />
-          </button>
+          </ActionButton>
         </div>
       </header>
       <aside className={styles.sidebar}>
@@ -103,6 +115,7 @@ export function WorkspaceShell({
           <strong>{name}</strong>
         </p>
         {navigation}
+        <MotionControl />
         <p className={styles.privateNote}>
           Your notes and click counts
           <br />
@@ -114,11 +127,11 @@ export function WorkspaceShell({
           <Menu size={17} /> Workspace navigation
         </summary>
         {navigation}
+        <MotionControl />
       </details>
       <main id="main" className={styles.main}>
         {children}
       </main>
-      <ToastProvider />
     </div>
   );
 }

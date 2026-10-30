@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState } from "react";
 import { KeyRound } from "lucide-react";
 import { toast } from "sonner";
@@ -89,12 +90,12 @@ export function PinSecurity() {
           </p>
         )}
         <div className={styles.actions}>
-          <button
+          <ActionButton pending={busy && !remove}
             className="button"
             disabled={busy || !pin || !currentPassword}
           >
-            Update owner PIN
-          </button>
+            {busy && !remove ? "Updating PIN…" : "Update owner PIN"}
+          </ActionButton>
           <button
             type="button"
             className="button secondary"

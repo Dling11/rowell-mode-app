@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useEffect, useState } from "react";
 import { Download, Check } from "lucide-react";
 
@@ -69,10 +70,10 @@ export function InstallApp() {
   return (
     <div>
       {prompt && (
-        <button className="button" onClick={install} disabled={busy}>
+        <ActionButton pending={busy} className="button" onClick={install} disabled={busy}>
           <Download size={16} />
           {busy ? "Opening install…" : "Install app"}
-        </button>
+        </ActionButton>
       )}
       <p className="muted" style={{ fontSize: 13, marginTop: 14 }}>
         You can also open Chrome’s menu and choose{" "}

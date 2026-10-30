@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState, type FormEvent } from "react";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -72,7 +73,7 @@ export function NotesWorkspace() {
         </p>
       </div>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />
@@ -151,13 +152,13 @@ export function NotesWorkspace() {
             </p>
           )}
           <div className={styles.actions}>
-            <button
+            <ActionButton pending={saving}
               className="button"
               disabled={busy || !dirty || !title.trim()}
             >
               <Save size={15} />
               {saving ? "Saving…" : "Save note"}
-            </button>
+            </ActionButton>
             <span>
               {dirty ? "Unsaved changes" : "Private · Saved changes only"}
             </span>

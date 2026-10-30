@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { ActionButton } from "@/components/ui/ActionButton";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { UserRound } from "lucide-react";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ export type OwnerProfile = { name: string; username: string };
 
 export function ProfileForm({ profile }: { profile: OwnerProfile }) {
   const router = useRouter();
+  const [refreshing, startRefresh] = useTransition();
   const [name, setName] = useState(profile.name);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +22,7 @@ export function ProfileForm({ profile }: { profile: OwnerProfile }) {
       <form
         className={styles.form}
         style={{ marginBottom: 25 }}
-        aria-busy={busy}
+        aria-busy={busy || refreshing}
         onSubmit={async (event) => {
           event.preventDefault();
           setBusy(true);
@@ -31,7 +33,7 @@ export function ProfileForm({ profile }: { profile: OwnerProfile }) {
               setError("Your profile couldn’t be saved. Please try again.");
             else {
               toast.success("Profile saved");
-              router.refresh();
+              startRefresh(() => router.refresh());
             }
           } catch {
             setError("Your profile couldn’t be saved. Please try again.");
@@ -63,9 +65,9 @@ export function ProfileForm({ profile }: { profile: OwnerProfile }) {
             {error}
           </p>
         )}
-        <button className="button" disabled={busy || !dirty || !name.trim()}>
-          {busy ? "Saving…" : "Save profile"}
-        </button>
+        <ActionButton pending={busy || refreshing} className="button" disabled={busy || !dirty || !name.trim()}>
+          {busy || refreshing ? "Saving…" : "Save profile"}
+        </ActionButton>
       </form>
       <UnsavedChangesGuard dirty={dirty} />
     </>

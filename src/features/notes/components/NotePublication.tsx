@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { Globe } from "lucide-react";
 import { toast } from "sonner";
 import { notesApi } from "../api/notes-api";
@@ -39,6 +39,7 @@ export function NotePublication({
       );
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     }
   }

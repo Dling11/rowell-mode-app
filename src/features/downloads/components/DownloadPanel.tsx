@@ -12,6 +12,7 @@ import {
   type SitePolicy,
 } from "@/features/site-settings/model/policy";
 import styles from "@/features/downloads/components/Downloads.module.css";
+import { DownloadLink } from "./DownloadLink";
 
 export function DownloadPanel({
   project,
@@ -43,7 +44,7 @@ export function DownloadPanel({
           </p>
           {allowed ? (
             project.platforms.map((platform) => (
-              <a
+              <DownloadLink
                 key={platform}
                 className={`button ${styles.download}`}
                 href={`/download/${project.id}/${platform}`}
@@ -60,7 +61,7 @@ export function DownloadPanel({
                   )}
                 </span>
                 <Download size={16} />
-              </a>
+              </DownloadLink>
             ))
           ) : (
             <div className={styles.paused} role="status">

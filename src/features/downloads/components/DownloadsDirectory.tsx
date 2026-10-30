@@ -1,10 +1,11 @@
-import Link from "next/link";
-import { ArrowUpRight, PauseCircle, Search } from "lucide-react";
+import Link from "@/components/ui/AppLink";
+import { PauseCircle, Search } from "lucide-react";
 import type { Project } from "@/features/projects/model/types";
 import type { SitePolicy } from "@/features/site-settings/model/policy";
 import { DownloadPackageRow } from "./DownloadPackageRow";
 import { DownloadPlatformTabs } from "./DownloadPlatformTabs";
 import styles from "./DownloadsDirectory.module.css";
+import { SearchForm } from "@/components/ui/SearchForm";
 
 export function DownloadsDirectory({
   projects,
@@ -36,7 +37,7 @@ export function DownloadsDirectory({
         <p className={styles.directoryHint}>
           Choose a platform to find your next download.
         </p>
-        <form action="/downloads" className={styles.search}>
+        <SearchForm action="/downloads" className={styles.search} submitLabel="Search downloads">
           <Search size={16} />
           <label className="sr-only" htmlFor="download-search">
             Search downloads
@@ -50,10 +51,7 @@ export function DownloadsDirectory({
             maxLength={100}
           />
           <input type="hidden" name="platform" value={platform} />
-          <button type="submit" aria-label="Search downloads">
-            <ArrowUpRight size={16} />
-          </button>
-        </form>
+        </SearchForm>
       </div>
       {!policy.available || policy.mode !== "normal" ? (
         <div className={styles.notice} role="status">

@@ -1,7 +1,9 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { Globe, ImagePlus, Lock, Plus } from "lucide-react";
 import { useImageUpload } from "../hooks/useImageUpload";
 import { uploadsApi } from "../api/uploads-api";
@@ -10,6 +12,7 @@ import type { ComposerProps } from "@/lib/composer";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { errorMessage } from "@/lib/errors";
 import styles from "@/components/workspace/QuickComposer.module.css";
+import { SelectedPhotoPreview } from "./SelectedPhotoPreview";
 
 export function QuickPhotoForm({
   onStateChange,
@@ -58,10 +61,12 @@ export function QuickPhotoForm({
         updatedAt: media.updatedAt || media.createdAt,
       }).unwrap();
       setFinished({ published: publicly, media });
+      toast.success(publicly ? "Photo published" : "Photo saved privately");
       setConfirm(false);
       onSaved();
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     } finally {
       setWorking(false);
@@ -128,7 +133,7 @@ export function QuickPhotoForm({
             type="file"
             accept="image/jpeg,image/png,image/webp,image/avif"
             required={!upload.completedMedia}
-            disabled={working || Boolean(upload.receipt)}
+            disabled={!upload.hydrated || working || Boolean(upload.receipt)}
             onChange={(event) => {
               upload.chooseFile(event.target.files?.[0] || null);
               setError("");
@@ -138,6 +143,7 @@ export function QuickPhotoForm({
             JPEG, PNG, WebP or AVIF · up to 5 MB
           </span>
         </label>
+        <SelectedPhotoPreview upload={upload} interactive={false} />
         <label className="field">
           Image description
           <input
@@ -181,9 +187,9 @@ export function QuickPhotoForm({
           </p>
         )}
         <div className={styles.actions}>
-          <button className="button secondary" disabled={working || !ready}>
+          <ActionButton pending={working && !confirm} className="button secondary" disabled={working || !ready}>
             <Lock size={14} /> Save privately
-          </button>
+          </ActionButton>
           <button
             className="button"
             type="button"

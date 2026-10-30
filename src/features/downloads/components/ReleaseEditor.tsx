@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { releasesApi } from "@/features/downloads/api/releases-api";
@@ -27,6 +28,7 @@ export function ReleaseEditor() {
       toast.success("Published asset verified and approved");
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     }
   }
@@ -38,7 +40,7 @@ export function ReleaseEditor() {
         aren’t promoted. MH4U stays source only.
       </p>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />
@@ -149,9 +151,9 @@ export function ReleaseEditor() {
             {error}
           </p>
         )}
-        <button className="button" disabled={isLoading}>
+        <ActionButton pending={isLoading} className="button" disabled={isLoading}>
           Verify & approve this asset
-        </button>
+        </ActionButton>
       </form>
       <ConfirmDialog
         open={confirm}

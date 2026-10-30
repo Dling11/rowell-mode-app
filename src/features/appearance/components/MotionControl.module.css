@@ -1,0 +1,2 @@
+.control { display: inline-flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; }
+.control select { min-height: 44px; max-width: 140px; color: var(--blue); border: 1px solid var(--border); border-radius: 6px; background: var(--background); padding: 7px; font-size: 11px; }

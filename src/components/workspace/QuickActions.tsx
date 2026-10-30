@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ImagePlus, NotebookPen, Settings2 } from "lucide-react";
 import styles from "./QuickComposer.module.css";
+import { Spinner } from "@/components/ui/Spinner";
+const OwnerToasts = dynamic(() => import("@/components/ui/ToastProvider").then((module) => module.ToastProvider), { ssr: false });
 
 const QuickComposerDialog = dynamic(
   () =>
@@ -14,7 +16,7 @@ const QuickComposerDialog = dynamic(
     ssr: false,
     loading: () => (
       <p role="status" className={styles.loading}>
-        Opening the editor…
+        <Spinner /> Opening the editor…
       </p>
     ),
   },
@@ -24,6 +26,7 @@ export function QuickActions({ kind }: { kind: "photo" | "note" }) {
   const [open, setOpen] = useState(false);
   return (
     <section className={styles.toolbar} aria-label="Owner quick actions">
+      <OwnerToasts />
       <div>
         <span className={styles.badge}>OWNER ACCESS</span>
         <p>

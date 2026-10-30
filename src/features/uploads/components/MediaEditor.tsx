@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import { PhotoPreview } from "@/components/media/PhotoPreview";
 import { Globe, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { uploadsApi } from "../api/uploads-api";
@@ -30,20 +30,17 @@ export function MediaEditor({ media }: { media: MediaRecord }) {
       toast.success(action ? "Photo published" : "Photo is private");
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setAction(null);
     }
   }
   return (
     <article className={styles.card}>
-      <div className={styles.preview}>
-        <Image
+        <PhotoPreview className={styles.preview} fit="contain"
           src={`/api/admin/uploads/${media.id}/preview`}
           alt="Uploaded image preview"
-          fill
-          unoptimized
-          sizes="500px"
+          caption={media.caption || media.name}
         />
-      </div>
       <div className={styles.body}>
         <div className={styles.meta}>
           <span className={styles.status}>

@@ -158,6 +158,11 @@ covers. `/admin/projects` selects published images for cards, spotlight and proj
 pages. The same editor manages external reference links and dated link history;
 references never become approved installers.
 
+Selecting a valid image shows a local preview before transfer. Click a saved image
+or public gallery photo for an enlarged view with zoom and keyboard controls.
+Local preview object URLs are released on replacement or when the uploader closes.
+The viewer uses the existing publication-checked or owner-only image routes.
+
 Public and owner image routes return resized previews through the server, capped
 at 3 MiB per response to stay below Vercel's buffered-response limit. Public delivery
 checks publication and maintenance each time; images use `no-store`. This uses

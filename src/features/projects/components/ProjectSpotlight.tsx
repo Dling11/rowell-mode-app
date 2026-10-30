@@ -10,12 +10,8 @@ import {
 import { ChevronLeft, ChevronRight, Pause, Play, Sparkles } from "lucide-react";
 import { useSpotlightPlayback } from "../hooks/useSpotlightPlayback";
 import styles from "./Spotlight.module.css";
+import { useMotionPreference } from "@/features/appearance/hooks/useMotionPreference";
 
-const watchMotion = (changed: () => void) => {
-  const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-  media.addEventListener("change", changed);
-  return () => media.removeEventListener("change", changed);
-};
 const watchVisibility = (changed: () => void) => {
   document.addEventListener("visibilitychange", changed);
   return () => document.removeEventListener("visibilitychange", changed);
@@ -32,11 +28,7 @@ export function ProjectSpotlight({
   const id = useId();
   const [active, setActive] = useState(0);
   const [readingSlide, setReadingSlide] = useState(false);
-  const reduced = useSyncExternalStore(
-    watchMotion,
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => true,
-  );
+  const { reduced } = useMotionPreference();
   const hidden = useSyncExternalStore(
     watchVisibility,
     () => document.hidden,

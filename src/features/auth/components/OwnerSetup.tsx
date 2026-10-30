@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "../lib/auth-client";
@@ -125,9 +126,9 @@ export function OwnerSetup() {
           {error}
         </p>
       )}
-      <button className="button" disabled={busy || !setupCode}>
+      <ActionButton pending={busy} className="button" disabled={busy || !setupCode}>
         {busy ? "Creating your account…" : "Create owner account"}
-      </button>
+      </ActionButton>
     </form>
   );
 }

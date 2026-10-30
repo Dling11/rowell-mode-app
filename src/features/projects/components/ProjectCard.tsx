@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ArrowRight, Smartphone, Monitor, ArrowUpRight } from "lucide-react";
 import type { Project } from "@/features/projects/model/types";
 import { ProjectVisual } from "@/features/projects/components/ProjectVisual";

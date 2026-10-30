@@ -1,7 +1,9 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { Upload } from "lucide-react";
 import type { ImageUploadController } from "../hooks/useImageUpload";
 import styles from "@/components/workspace/Workspace.module.css";
+import { SelectedPhotoPreview } from "./SelectedPhotoPreview";
 
 const phaseLabels = {
   idle: "Upload privately",
@@ -26,12 +28,13 @@ export function UploadForm({ upload }: { upload: ImageUploadController }) {
           key={upload.inputKey}
           type="file"
           accept="image/jpeg,image/png,image/webp,image/avif"
-          disabled={upload.busy || Boolean(upload.receipt)}
+          disabled={!upload.hydrated || upload.busy || Boolean(upload.receipt)}
           onChange={(event) =>
             upload.chooseFile(event.target.files?.[0] || null)
           }
         />
       </label>
+      <SelectedPhotoPreview upload={upload} />
       <p>
         JPEG, PNG, WebP or AVIF · up to 5 MB. Provider storage and usage quotas
         also apply.
@@ -44,14 +47,14 @@ export function UploadForm({ upload }: { upload: ImageUploadController }) {
       <div className={styles.actions}>
         {upload.receipt ? (
           <>
-            <button
+            <ActionButton pending={upload.busy}
               type="button"
               className="button"
               disabled={upload.busy}
               onClick={upload.retryVerification}
             >
               {upload.busy ? phaseLabels[upload.phase] : "Retry verification"}
-            </button>
+            </ActionButton>
             <button
               type="button"
               className="button secondary"
@@ -62,10 +65,10 @@ export function UploadForm({ upload }: { upload: ImageUploadController }) {
             </button>
           </>
         ) : (
-          <button className="button" disabled={!upload.canUpload}>
+          <ActionButton pending={upload.busy} className="button" disabled={!upload.canUpload}>
             <Upload size={15} />
             {phaseLabels[upload.phase]}
-          </button>
+          </ActionButton>
         )}
         {upload.busy && upload.phase !== "verifying" && (
           <button

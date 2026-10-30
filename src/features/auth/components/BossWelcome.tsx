@@ -3,7 +3,6 @@ import {
   useEffect,
   useId,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
 } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -17,11 +16,8 @@ import {
 } from "../model/welcome-scenes";
 import type { WelcomeMotion } from "../hooks/useWelcomeMotion";
 import styles from "./BossWelcome.module.css";
-const subscribeMotion = (changed: () => void) => {
-  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-  query.addEventListener("change", changed);
-  return () => query.removeEventListener("change", changed);
-};
+import { useWelcomeSequence } from "../hooks/useWelcomeSequence";
+import { useMotionPreference } from "@/features/appearance/hooks/useMotionPreference";
 function Letters({ text }: { text: string }) {
   return (
     <>
@@ -51,17 +47,14 @@ export function BossWelcome({
   onComplete: () => void;
 }) {
   const descriptionId = useId();
-  const reduced = useSyncExternalStore(
-    subscribeMotion,
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => true,
-  );
+  const { reduced } = useMotionPreference();
   const [override, setOverride] = useState<WelcomeMotion | null>(null);
   const [ready, setReady] = useState(false);
   const [run, setRun] = useState(0);
   const preference = override || motion;
   const animate =
     preference === "full" || (preference === "system" && !reduced);
+  const { scope, move, leave } = useWelcomeSequence({ enabled: animate, ready, run, preview });
   const selected =
     welcomeScenes.find((item) => item.id === scene) ||
     welcomeScenes.find((item) => item.id === defaultWelcomeScene)!;
@@ -96,14 +89,18 @@ export function BossWelcome({
           data-motion={animate ? "full" : "still"}
           data-ready={ready}
           data-preview={preview}
+          data-engine="motion"
+          onPointerMove={move}
+          onPointerLeave={leave}
           aria-describedby={descriptionId}
           onOpenAutoFocus={(event) => {
             event.preventDefault();
             document.getElementById("welcome-continue")?.focus();
           }}
         >
-          <div className={styles.stage} key={run}>
-            <div className={styles.art}>
+          <div className={styles.stage} key={run} ref={scope}>
+            <div className={styles.art} data-cinematic="art">
+              <div className={styles.parallax} data-cinematic="parallax">
               <Image
                 src={selected.image}
                 alt=""
@@ -114,6 +111,7 @@ export function BossWelcome({
                 onLoad={() => setReady(true)}
                 onError={() => setReady(true)}
               />
+              </div>
             </div>
             <div className={styles.darkness} />
             <div className={styles.aura} />
@@ -125,10 +123,11 @@ export function BossWelcome({
                 <i key={index} style={{ "--n": index } as CSSProperties} />
               ))}
             </div>
-            <div className={styles.curtainTop} />
-            <div className={styles.curtainBottom} />
+            <div className={styles.seal} data-cinematic="seal" aria-hidden="true"><span /><span /><span /></div>
+            <div className={styles.curtainTop} data-cinematic="curtain-top" />
+            <div className={styles.curtainBottom} data-cinematic="curtain-bottom" />
             <div className={styles.message}>
-              <p className={styles.kicker}>
+              <p className={styles.kicker} data-cinematic="kicker">
                 <ShieldCheck size={14} />
                 {preview ? "THE ENTRANCE" : "ACCESS GRANTED"}
               </p>
@@ -136,27 +135,28 @@ export function BossWelcome({
                 className={styles.title}
                 aria-label="WELCOME BOSS ROWELL"
               >
-                <span className={styles.welcome} aria-hidden="true">
+                <span className={styles.welcome} data-cinematic="welcome" aria-hidden="true">
                   <Letters text="WELCOME" />
                 </span>{" "}
-                <span className={styles.boss} aria-hidden="true">
+                <span className={styles.boss} data-cinematic="boss" aria-hidden="true">
                   <Letters text="BOSS" />
                 </span>{" "}
-                <strong className={styles.name} aria-hidden="true">
+                <strong className={styles.name} data-cinematic="name" aria-hidden="true">
                   <Letters text="ROWELL" />
                 </strong>
               </Dialog.Title>
               <Dialog.Description
                 id={descriptionId}
                 className={styles.subtitle}
+                data-cinematic="subtitle"
               >
                 {preview
                   ? selected.name
                   : "Your world. Your rules. Your workbench."}
               </Dialog.Description>
-              <div className={styles.line} />
+              <div className={styles.line} data-cinematic="line" />
             </div>
-            <div className={styles.exitVeil} />
+            <div className={styles.exitVeil} data-cinematic="exit" />
           </div>
           <div className={styles.top}>
             <span>ROWELL / MODE</span>

@@ -1,0 +1,4 @@
+.toast { box-shadow: 0 12px 36px #0006; border-radius: 10px; font-size: 13px; }
+.success { border-left: 3px solid var(--green) !important; }
+.error { border-left: 3px solid #f1a9b7 !important; }
+.loading { border-left: 3px solid var(--blue) !important; }

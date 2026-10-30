@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/AppLink";
 import { ArrowRight, NotebookPen } from "lucide-react";
 import { getPublicUpdates } from "@/server/db/updates";
 import { findProject } from "@/data/projects";

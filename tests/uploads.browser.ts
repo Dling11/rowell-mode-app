@@ -63,6 +63,7 @@ test("private image verification can retry without uploading a second copy", asy
         });
   });
   await page.goto("/admin/uploads");
+  await expect(page.getByLabel("Image file")).toBeEnabled();
   await page.getByLabel("Image file").setInputFiles(image);
   await page.getByRole("button", { name: "Upload privately" }).click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
@@ -104,6 +105,7 @@ test("cancelling a transfer keeps the selected image retryable and does not veri
   });
   try {
     await page.goto("/admin/uploads");
+    await expect(page.getByLabel("Image file")).toBeEnabled();
     await page.getByLabel("Image file").setInputFiles(image);
     await page.getByRole("button", { name: "Upload privately" }).click();
     await expect(
@@ -132,6 +134,7 @@ test("transfer failure allows a normal retry and file validation blocks non-imag
     return route.fulfill({ status: 503, json: {} });
   });
   await page.goto("/admin/uploads");
+  await expect(page.getByLabel("Image file")).toBeEnabled();
   await page
     .getByLabel("Image file")
     .setInputFiles({

@@ -1,6 +1,8 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { toast } from "sonner";
+import Link from "@/components/ui/AppLink";
 import { Globe, Lock, Plus } from "lucide-react";
 import { notesApi } from "../api/notes-api";
 import type { Note } from "../model/schema";
@@ -57,10 +59,12 @@ export function QuickNoteForm({
           status,
         }).unwrap();
       setFinished(publicly ? "public" : "private");
+      toast.success(publicly ? "Note published" : "Private note saved");
       setConfirm(false);
       onSaved();
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     } finally {
       setWorking(false);
@@ -180,13 +184,13 @@ export function QuickNoteForm({
           </p>
         )}
         <div className={styles.actions}>
-          <button
+          <ActionButton pending={working && !confirm}
             className="button secondary"
             disabled={working || !title.trim()}
           >
             <Lock size={14} />
             {working ? "Saving…" : "Save privately"}
-          </button>
+          </ActionButton>
           <button
             className="button"
             type="button"

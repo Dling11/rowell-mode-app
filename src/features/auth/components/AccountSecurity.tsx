@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState } from "react";
 import { Fingerprint, KeyRound } from "lucide-react";
 import { toast } from "sonner";
@@ -78,9 +79,9 @@ export function AccountSecurity({ profile }: { profile: OwnerProfile }) {
           prompt. Keep your password as a backup. Adding a passkey requires a
           recent sign-in.
         </p>
-        <button className="button" disabled={busy}>
+        <ActionButton pending={busy} className="button" disabled={busy}>
           {busy ? "Waiting for your device…" : "Add a passkey"}
-        </button>
+        </ActionButton>
         {isPending && <p role="status">Loading passkeys…</p>}
         {queryError && (
           <div role="alert">
@@ -240,9 +241,9 @@ function PasswordForm() {
           {error}
         </p>
       )}
-      <button className="button" disabled={busy}>
+      <ActionButton pending={busy} className="button" disabled={busy}>
         {busy ? "Saving…" : "Change password"}
-      </button>
+      </ActionButton>
     </form>
   );
 }

@@ -22,6 +22,8 @@ test("red moon supersedes the old saved smoke choice and the name reveals in sep
   await expect(entrance).toHaveAttribute("data-ready", "true");
   await expect(entrance).toHaveAttribute("data-motion", "full");
   const letters = entrance.locator("strong span");
+  expect(await letters.first().evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
+  expect(await letters.first().evaluate((element) => element.getAnimations().length)).toBeGreaterThan(0);
   async function at(time: number) {
     await entrance.evaluate((element, time) => {
       for (const animation of element.getAnimations({ subtree: true })) {
@@ -108,8 +110,8 @@ test("a reduced-motion visitor can explicitly play full animation and keep that 
     await entrance
       .locator("strong span")
       .first()
-      .evaluate((element) => getComputedStyle(element).animationName),
-  ).not.toBe("none");
+      .evaluate((element) => element.getAnimations().length),
+  ).toBeGreaterThan(0);
   await entrance.getByRole("button", { name: "Close preview" }).click();
   await page.reload();
   await page

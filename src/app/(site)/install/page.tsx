@@ -6,6 +6,7 @@ import { InstallApp } from "@/features/install/components/InstallApp";
 import styles from "@/app/(site)/install/page.module.css";
 import { redirect } from "next/navigation";
 import { getOwner } from "@/server/auth/session";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Install the app",
@@ -16,6 +17,7 @@ export default async function InstallPage() {
   if (!(await getOwner())) redirect("/admin/login?returnTo=%2Finstall");
   return (
     <main id="main" className="container">
+      <ToastProvider />
       <div className="page-intro">
         <p className="eyebrow">A PLACE ON YOUR HOME SCREEN</p>
         <h1>Keep it a tap away.</h1>

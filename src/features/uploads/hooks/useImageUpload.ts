@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { uploadsApi } from "../api/uploads-api";
 import { setUpload } from "../model/upload-slice";
@@ -10,12 +10,17 @@ import type { MediaRecord } from "../model/schema";
 
 type Receipt = { id: string; name: string };
 type Phase = "idle" | "signing" | "uploading" | "verifying";
+const subscribeHydration = () => () => {};
 
 export function useImageUpload() {
+  const toastId = useId();
+  const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
   const dispatch = useAppDispatch();
   const [sign] = uploadsApi.useSignUploadMutation();
   const [complete] = uploadsApi.useCompleteUploadMutation();
   const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const previewResource = useRef<string | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const [error, setError] = useState("");
   const [receipt, setReceipt] = useState<Receipt | null>(null);
@@ -33,18 +38,25 @@ export function useImageUpload() {
       mounted.current = false;
       controller.current?.abort();
       request.current?.abort();
+      toast.dismiss(toastId);
+      if (previewResource.current) URL.revokeObjectURL(previewResource.current);
     };
-  }, []);
+  }, [toastId]);
 
   function chooseFile(next: File | null) {
     if (active.current) return;
     setFile(next);
+    if (previewResource.current) URL.revokeObjectURL(previewResource.current);
+    const url = next && !imageFileError(next) ? URL.createObjectURL(next) : null;
+    previewResource.current = url;
+    setPreviewUrl(url);
     setCompletedMedia(null);
     setError(next ? imageFileError(next) || "" : "");
   }
   async function verify(current: Receipt) {
     if (!mounted.current) return;
     setPhase("verifying");
+    toast.loading("Verifying your image…", { id: toastId });
     dispatch(setUpload({ ...current, status: "verifying" }));
     const operation = complete({ id: current.id });
     request.current = operation;
@@ -55,7 +67,7 @@ export function useImageUpload() {
     setReceipt(null);
     setFile(null);
     setInputKey((key) => key + 1);
-    toast.success("Image uploaded and verified");
+    toast.success("Image uploaded and verified", { id: toastId });
     return verified;
   }
   async function upload() {
@@ -67,6 +79,7 @@ export function useImageUpload() {
     }
     active.current = true;
     setPhase("signing");
+    toast.loading("Preparing your image upload…", { id: toastId });
     setError("");
     const transfer = new AbortController();
     controller.current = transfer;
@@ -83,6 +96,7 @@ export function useImageUpload() {
       current = { id: signature.id, name: file.name };
       dispatch(setUpload({ ...current, status: "uploading" }));
       if (mounted.current) setPhase("uploading");
+      toast.loading("Transferring your image…", { id: toastId });
       await transferImage(file, signature, transfer.signal);
       transferred = true;
       if (mounted.current) setReceipt(current);
@@ -96,7 +110,7 @@ export function useImageUpload() {
             ? "The image transferred, but verification didn’t finish. Retry verification below."
             : errorMessage(failure);
         setError(message);
-        toast.error(message);
+        toast.error(message, { id: toastId });
       }
     } finally {
       active.current = false;
@@ -114,6 +128,7 @@ export function useImageUpload() {
     } catch (failure) {
       dispatch(setUpload({ ...receipt, status: "error" }));
       if (mounted.current) setError(errorMessage(failure));
+      toast.error(errorMessage(failure), { id: toastId });
     } finally {
       active.current = false;
       request.current = null;
@@ -130,13 +145,18 @@ export function useImageUpload() {
     setReceipt(null);
     setCompletedMedia(null);
     setFile(null);
+    if (previewResource.current) URL.revokeObjectURL(previewResource.current);
+    previewResource.current = null;
+    setPreviewUrl(null);
     setError("");
     setInputKey((key) => key + 1);
   }
   const canUpload =
     Boolean(file && !imageFileError(file)) && phase === "idle" && !receipt;
   return {
+    hydrated,
     file,
+    previewUrl,
     phase,
     error,
     receipt,

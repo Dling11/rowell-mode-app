@@ -27,12 +27,14 @@
     "cloudinary": "^2.11.0",
     "lucide-react": "^1.64.0",
     "mongodb": "^7.7.0",
+    "motion": "^14.8.0",
     "next": "^16.4.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-redux": "^9.3.1",
     "server-only": "^0.0.1",
     "sonner": "^2.0.8",
+    "yet-another-react-lightbox": "^3.32.2",
     "zod": "^4.6.7"
   },
   "devDependencies": {

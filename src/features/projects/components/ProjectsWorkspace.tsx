@@ -1,4 +1,5 @@
 "use client";
+import { ActionButton } from "@/components/ui/ActionButton";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { projectsApi } from "@/features/projects/api/projects-api";
@@ -44,6 +45,7 @@ function ProjectEditor({
       toast.success("Project updated");
     } catch (err) {
       setError(errorMessage(err));
+      toast.error(errorMessage(err));
       setConfirm(false);
     }
   }
@@ -107,9 +109,9 @@ function ProjectEditor({
             {error}
           </p>
         )}
-        <button className="button" disabled={isLoading || !dirty}>
+        <ActionButton pending={isLoading} className="button" disabled={isLoading || !dirty}>
           Save public changes
-        </button>
+        </ActionButton>
       </form>
       <UnsavedChangesGuard dirty={dirty} />
       <ConfirmDialog
@@ -141,7 +143,7 @@ export function ProjectsWorkspace() {
         </p>
       </div>
       <QueryState
-        loading={query.isLoading}
+        loading={query.isLoading} fetching={query.isFetching}
         error={query.error}
         retry={query.refetch}
       />
