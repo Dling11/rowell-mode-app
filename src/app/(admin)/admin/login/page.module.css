@@ -1,0 +1,68 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 35px 20px;
+  background: radial-gradient(ellipse at 50% 30%, #243b5740, transparent 60%);
+}
+.card {
+  max-width: 470px;
+  width: 100%;
+  text-align: center;
+}
+.brand {
+  display: inline-block;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+.brand span {
+  color: var(--blue);
+}
+.lock {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 1px solid #3c536d;
+  border-radius: 18px;
+  color: var(--blue);
+  background: var(--surface);
+  margin: 60px auto 28px;
+}
+.card h1 {
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  margin: 16px 0 20px;
+}
+.card > p:not(:global(.eyebrow)) {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 26px;
+}
+.card > :global(.button) {
+  margin-top: 5px;
+  min-width: 235px;
+}
+.card > :global(.text-link) {
+  justify-content: center;
+  display: flex;
+  margin-top: 18px;
+}
+.card .setup {
+  font-size: 11px !important;
+  max-width: 320px;
+  margin: 22px auto 0;
+}
+.foot {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 55px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}

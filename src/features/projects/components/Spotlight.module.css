@@ -1,0 +1,240 @@
+.card {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #344961;
+  border-radius: 13px;
+  background: linear-gradient(140deg, #17263a, #101b2b);
+  box-shadow: 0 18px 40px #050a1425;
+  transform: rotate(1.2deg);
+}
+.art {
+  overflow: hidden;
+  border-radius: 8px;
+}
+.art > div {
+  animation: drift 9s ease-in-out infinite;
+  animation-play-state: paused;
+  transform: scale(1.065);
+}
+.card[data-playing="true"] .art > div {
+  animation-play-state: running;
+}
+.card[data-reduced="true"] {
+  transform: rotate(1deg);
+}
+.card[data-reduced="true"] .art > div {
+  animation: none;
+  transform: none;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 1px 2px 13px;
+  color: var(--muted);
+  font-size: 8px;
+  letter-spacing: 0.13em;
+}
+.top > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue);
+}
+.position {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.playback {
+  color: var(--blue);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+.viewport {
+  display: grid;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.progress {
+  height: 2px;
+  margin-top: 9px;
+  background: #2b3d53;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--blue);
+  transform-origin: left;
+  animation: countdown 4.8s linear forwards;
+  animation-play-state: paused;
+}
+.card[data-playing="true"] .progress span {
+  animation-play-state: running;
+}
+.card[data-reduced="true"] .progress span {
+  animation: none;
+}
+@keyframes countdown {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.slide {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(35px) scale(0.96) rotate(1.5deg);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1),
+    visibility 0.75s;
+  pointer-events: none;
+}
+.slide[data-active="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 19px 5px 8px;
+}
+.info > div {
+  min-width: 0;
+}
+.info > div > span {
+  color: var(--muted);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.info h2 {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  margin: 6px 0 9px;
+}
+.info p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.info p span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.explore {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 1px solid #3b4e65;
+  border-radius: 50%;
+  color: var(--blue);
+}
+.explore:hover {
+  background: var(--surface-raised);
+}
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 2px 0;
+  border-top: 1px solid #293a50;
+  margin-top: 7px;
+}
+.dots,
+.arrows {
+  display: flex;
+  align-items: center;
+}
+.controls button {
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  border-radius: 5px;
+}
+.controls button:hover {
+  color: var(--highlight);
+  background: #20334a;
+}
+.controls button:disabled {
+  opacity: 0.45;
+}
+.dots button span {
+  width: 5px;
+  height: 5px;
+  border-radius: 9px;
+  background: #52677f;
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+}
+.dots button[aria-current] span {
+  width: 22px;
+  background: var(--blue);
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.065);
+  }
+  50% {
+    transform: translateY(-7px) scale(1.065);
+  }
+}
+@media (max-width: 620px) {
+  .card {
+    margin: 0 3px;
+  }
+  .info h2 {
+    font-size: 21px;
+  }
+  .controls button {
+    min-width: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+    transform: none;
+  }
+  .slide,
+  .dots button span {
+    transition: none;
+  }
+}
+@media (max-width: 360px) {
+  .dots {
+    display: none;
+  }
+  .arrows {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .controls button {
+    min-width: 44px;
+  }
+}

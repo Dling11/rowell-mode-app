@@ -1,0 +1,111 @@
+.form {
+  display: grid;
+  gap: 18px;
+  text-align: left;
+  margin-top: 25px;
+}
+.form button {
+  width: 100%;
+  min-height: 46px;
+}
+.form p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.hint {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+.methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 25px;
+  padding: 5px;
+  background: #101a29;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+.methods button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+.methods button[aria-pressed="true"] {
+  color: var(--text);
+  background: #263951;
+}
+.entrance {
+  margin-top: 25px;
+  border-top: 1px solid var(--border);
+  padding-top: 9px;
+  text-align: left;
+}
+.entrance summary {
+  font-size: 11px;
+  color: var(--muted);
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+}
+.scenes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+.scenes label {
+  position: relative;
+  display: grid;
+  gap: 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.scenes label:has(input:checked) {
+  border-color: #c67489;
+  background: #382331;
+}
+.scenes img {
+  width: 100%;
+  aspect-ratio: 1.5;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.scenes input {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  accent-color: #cc7c93;
+}
+.scenes span {
+  font-size: 9px;
+  color: var(--muted);
+  padding: 0 3px 5px;
+}
+.entrance > button {
+  width: 100%;
+  font-size: 11px;
+}
+.welcomeLoading {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  background: #020305;
+  color: #eee0e5;
+  font-size: clamp(20px, 5vw, 60px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.motionChoice {
+  margin-bottom: 16px;
+  font-size: 11px;
+}

@@ -1,0 +1,51 @@
+.pad {
+  display: grid;
+  gap: 20px;
+  max-width: 330px;
+  width: 100%;
+  margin: 0 auto;
+}
+.input {
+  text-align: center;
+  letter-spacing: 0.22em;
+  min-height: 50px !important;
+  font-size: 19px !important;
+}
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.keys button {
+  min-height: 62px !important;
+  width: 100%;
+  border: 1px solid #344860;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1c2c40, #121c2a);
+  color: var(--text);
+  font-size: 23px;
+  font-weight: 400;
+  display: grid;
+  place-items: center;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.keys button:hover {
+  background: #2a3d54;
+}
+.keys button:active {
+  transform: scale(0.95);
+}
+.keys .utility {
+  font-size: 11px;
+  color: var(--muted);
+}
+@media (max-width: 380px) {
+  .keys {
+    gap: 9px;
+  }
+  .keys button {
+    min-height: 54px !important;
+  }
+}

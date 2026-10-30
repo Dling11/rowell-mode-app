@@ -1,0 +1,14 @@
+.layout { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 65px; align-items: start; }
+.panel { padding: 36px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.icon { border-radius: 20px; margin-bottom: 25px; }
+.panel h2 { font-size: 29px; font-weight: 500; letter-spacing: -.035em; margin: 15px 0; }
+.description { color: var(--muted); font-size: 13px; margin-bottom: 23px; }
+.steps { padding-left: 21px; color: var(--muted); font-size: 13px; margin: 28px 0; }
+.steps li { padding-left: 7px; margin-bottom: 13px; }
+.hint { color: var(--muted); font-size: 11px; padding-top: 22px; border-top: 1px solid var(--border); }
+.details { display: grid; gap: 30px; padding-top: 15px; }
+.details svg { color: var(--blue); margin-bottom: 15px; }
+.details h2 { font-size: 19px; font-weight: 500; margin-bottom: 12px; letter-spacing: -.02em; }
+.details p { color: var(--muted); font-size: 13px; max-width: 390px; }
+@media(max-width: 850px) { .layout { gap: 30px; } .panel { padding: 26px; } }
+@media(max-width: 620px) { .layout { grid-template-columns: minmax(0,1fr); gap: 35px; } .panel { padding: 25px; } .panel h2 { font-size: 26px; } }

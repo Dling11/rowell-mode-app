@@ -1,0 +1,76 @@
+.panel {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 26px;
+  border-radius: 10px;
+}
+.panel h2 {
+  margin-top: 13px;
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.label {
+  font-size: 11px;
+  color: var(--blue);
+  margin-top: 10px;
+}
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 20px 0;
+}
+.download {
+  width: 100%;
+  margin-bottom: 12px;
+  justify-content: space-between;
+}
+.download > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.small {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 12px 0;
+}
+.panel :global(.text-link) {
+  font-size: 11px;
+}
+.paused {
+  display: flex;
+  gap: 10px;
+  background: #1b2839;
+  padding: 15px;
+  border-radius: 7px;
+  color: var(--blue);
+}
+.paused > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.paused strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.paused p {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
+}
+.download > span {
+  min-width: 0;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.download small {
+  flex-basis: 100%;
+  padding-left: 27px;
+  font-size: 10px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.download > svg {
+  flex-shrink: 0;
+}

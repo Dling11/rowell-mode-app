@@ -1,0 +1,82 @@
+# Dependencies and generated website output
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment values and hosting-local state
+.env
+.env.*
+!.env.example
+.vercel/
+
+# Private context, credentials and local artifacts
+.private/
+# All assistant instructions, prompt history and handoff notes stay local.
+AGENTS.md
+AGENTS.override.md
+CLAUDE.md
+GEMINI.md
+AI_CONTEXT.md
+AI_NOTES.md
+HANDOFF.md
+.cursorrules
+.github/copilot-instructions.md
+.codex/
+.claude/
+.cursor/
+.gemini/
+.ai/
+ai-docs/
+AI_DOCS/
+prompts/
+handoffs/
+transcripts/
+*.prompt.*
+*.session.jsonl
+.local/
+.tools/
+.cache/
+logs/
+backups/
+/uploads/
+/downloads/
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.apk
+*.aab
+*.exe
+*.dll
+*.zip
+*.7z
+*.rar
+*.iso
+*.rvz
+*.cia
+*.3ds
+*.cci
+*.cxi
+*.sql
+*.sqlite
+*.sqlite3
+
+# Machine-local editor / operating-system state
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Keep source code, README, the curated catalog and lockfiles tracked.
+# Ignoring a file does not remove it from an existing commit or make public/ private.

@@ -1,0 +1,49 @@
+{
+  "name": "rowell-project-hub",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts && tsx --conditions=react-server --test tests/server/*.test.ts",
+    "test:browser": "playwright test",
+    "icons": "node scripts/generate-app-icons.mjs",
+    "db:init": "tsx --conditions=react-server scripts/init-db.ts",
+    "media:setup": "tsx scripts/setup-cloudinary.ts",
+    "owner:setup": "node scripts/setup-owner.mjs"
+  },
+  "dependencies": {
+    "@better-auth/mongo-adapter": "^1.7.14",
+    "@better-auth/passkey": "^1.7.14",
+    "@radix-ui/react-dialog": "^1.3.1",
+    "@reduxjs/toolkit": "^2.13.0",
+    "better-auth": "^1.7.14",
+    "cloudinary": "^2.11.0",
+    "lucide-react": "^1.64.0",
+    "mongodb": "^7.7.0",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-redux": "^9.3.1",
+    "server-only": "^0.0.1",
+    "sonner": "^2.0.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}
