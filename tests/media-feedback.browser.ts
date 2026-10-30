@@ -68,7 +68,8 @@ test("an explicit Motion On preference restores animation on a reduced-motion de
 
 test("owner sign-in and sign-out notifications survive the transition between owner pages", async ({ page, context }) => {
   await signIn(context);
-  await page.addInitScript(() => sessionStorage.setItem("rowell-mode:owner-notice", "signed-in"));
+  await page.goto("/");
+  await page.evaluate(() => sessionStorage.setItem("rowell-mode:owner-notice", "signed-in"));
   await page.route("**/api/auth/passkey/list-user-passkeys", (route) => route.fulfill({ json: [] }));
   await page.route("**/api/auth/sign-out", async (route) => { await context.clearCookies(); await route.fulfill({ json: { success: true } }); });
   await page.goto("/admin/account");
@@ -76,6 +77,8 @@ test("owner sign-in and sign-out notifications survive the transition between ow
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/\/admin\/login$/);
   await expect(page.getByText("Signed out. Your workspace is locked.", { exact: true })).toBeVisible();
+  expect(await page.getByText("Signed in. Welcome back, Rowell.", { exact: true }).count()).toBe(0);
+  await expect(page.getByRole("dialog", { name: "WELCOME BOSS ROWELL" })).toHaveCount(0);
 });
 
 test("public pages advertise the approved logo and a real social preview image", async ({ page, request }) => {

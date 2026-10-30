@@ -35,8 +35,8 @@ const BossWelcome = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className={styles.welcomeLoading} role="status">
-        WELCOME BOSS ROWELL
+      <div className={styles.welcomeLoading} role="status" aria-busy="true" data-welcome-loading>
+        <span className="sr-only">Preparing your entrance…</span>
       </div>
     ),
   },
@@ -76,6 +76,7 @@ export function OwnerSignIn({
   const closePreview = useCallback(() => setPreview(false), []);
   const blocked = busy || welcome;
   function success() {
+    toast.dismiss();
     setPin("");
     setWelcome(true);
   }

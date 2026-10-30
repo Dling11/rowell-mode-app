@@ -1,10 +1,11 @@
 "use client";
 import Link from "@/components/ui/AppLink";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { authClient } from "@/features/auth/lib/auth-client";
+import { queueSignOutNotice } from "@/features/auth/lib/owner-notice";
 import {
   LayoutDashboard,
   FolderCode,
@@ -44,9 +45,7 @@ export function WorkspaceShell({
   name: string;
 }) {
   const path = usePathname();
-  const router = useRouter();
   const [signingOut, setSigningOut] = useState(false);
-  const [navigating, startNavigation] = useTransition();
   const dispatch = useAppDispatch();
   const activeUploads = useAppSelector(
     (state) =>
@@ -69,18 +68,18 @@ export function WorkspaceShell({
     </nav>
   );
   async function logout() {
-    if (signingOut || navigating) return;
+    if (signingOut) return;
     setSigningOut(true);
     try {
       const result = await authClient.signOut();
       if (result.error) throw new Error("Sign-out failed");
       dispatch(adminApi.util.resetApiState());
       dispatch(clearUploads());
-      toast.success("Signed out. Your workspace is locked.", { id: "owner-signed-out" });
-      startNavigation(() => { router.replace("/admin/login"); router.refresh(); });
+      toast.dismiss();
+      queueSignOutNotice();
+      window.location.replace("/admin/login");
     } catch {
       toast.error("Couldn’t sign out. Please try again.");
-    } finally {
       setSigningOut(false);
     }
   }
@@ -103,7 +102,7 @@ export function WorkspaceShell({
           >
             <span>View site</span> <ArrowUpRight size={14} />
           </Link>
-          <ActionButton pending={signingOut || navigating} aria-label="Sign out" data-leaves-workspace onClick={logout}>
+          <ActionButton pending={signingOut} aria-label="Sign out" data-leaves-workspace onClick={logout}>
             <LogOut size={17} />
           </ActionButton>
         </div>
