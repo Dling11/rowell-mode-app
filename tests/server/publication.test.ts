@@ -200,3 +200,46 @@ test("public records and media delivery enforce publication while note copies pr
     }
   }
 });
+
+test("project release notes follow the approved platform versions, including older and mixed approvals", async () => {
+  const oldEnv = { uri: process.env.MONGODB_URI, db: process.env.MONGODB_DB };
+  const oldPromise = global.hubMongoPromise;
+  const releases: Row[] = [
+    { projectId: "share-mode", platform: "android", pointer: { projectId: "share-mode", platform: "android", tag: "v1.0.4", asset: "Share-Mode-1.0.4.apk" } },
+    { projectId: "share-mode", platform: "windows", pointer: { projectId: "share-mode", platform: "windows", tag: "v1.0.4", asset: "Share-Mode-Windows-1.0.4.zip" } },
+  ];
+  const db = memoryDatabase({ releases });
+  process.env.MONGODB_URI = "mongodb://isolated.invalid";
+  process.env.MONGODB_DB = "isolated-approved-release-test";
+  global.hubMongoPromise = Promise.resolve({ db: () => db } as unknown as MongoClient);
+  try {
+    let project = (await getPublicProjects()).find((project) => project.id === "share-mode")!;
+    assert.equal(project.version, "1.0.4");
+    assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases/tag/v1.0.4");
+    assert.equal(project.releaseLabel, "Public preview");
+
+    for (const release of releases) {
+      const pointer = release.pointer as Record<string, string>;
+      pointer.tag = "v1.0.3";
+      pointer.asset = pointer.asset.replace("1.0.4", "1.0.3");
+    }
+    project = (await getPublicProjects()).find((project) => project.id === "share-mode")!;
+    assert.equal(project.version, "1.0.3");
+    assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases/tag/v1.0.3");
+    assert.equal(project.releaseLabel, "Owner-approved public release");
+
+    (releases[1].pointer as Record<string, string>).tag = "v1.0.4";
+    (releases[1].pointer as Record<string, string>).asset = "Share-Mode-Windows-1.0.4.zip";
+    project = (await getPublicProjects()).find((project) => project.id === "share-mode")!;
+    assert.equal(project.version, null);
+    assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases");
+    assert.deepEqual(project.approvedTags, { android: "v1.0.3", windows: "v1.0.4" });
+    assert.equal((await getPublicProjects()).find((project) => project.id === "mh4u")!.release, null);
+  } finally {
+    global.hubMongoPromise = oldPromise;
+    for (const [key, value] of Object.entries({ MONGODB_URI: oldEnv.uri, MONGODB_DB: oldEnv.db })) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});

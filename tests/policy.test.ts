@@ -35,7 +35,7 @@ test("unpublished projects and mismatched platform packages cannot be approved",
   assert.equal(releasePointerSchema.safeParse({...pointer,platform:"windows"}).success,false);
   assert.equal(releasePointerSchema.safeParse({...pointer,tag:"../../latest"}).success,false);
   assert.equal(projects.find(p=>p.id==="mh4u")?.release,null);
-  assert.equal(projects.find(p=>p.id==="share-mode")?.version,"1.0.2");
+  assert.equal(projects.find(p=>p.id==="share-mode")?.version,"1.0.4");
 });
 test("click accounting excludes HEAD, prefetch and obvious automation",()=>{
   const request=(headers:Record<string,string>={},method="GET")=>new Request("https://hub.example/download/mh-tri/android",{method,headers:{"user-agent":"Mozilla/5.0",...headers}});

@@ -88,9 +88,10 @@ test("source-only project has no download action and known releases remain label
   ).toBeVisible();
   await page.goto("/projects/share-mode");
   await expect(
-    page.getByText("Older public build · Share-Me-Rowell"),
+    page.getByText("Public preview", { exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("Version 1.0.2", { exact: true })).toBeVisible();
+  await expect(page.getByText("Version 1.0.4", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Read release notes/ })).toHaveAttribute("href", "https://github.com/Dling11/share-me-rowell/releases/tag/v1.0.4");
 });
 test("public content and project navigation work before JavaScript", async ({
   browser,

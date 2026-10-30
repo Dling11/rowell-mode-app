@@ -32,14 +32,14 @@ async function main() {
     {
       projectId: "share-mode",
       platform: "android",
-      tag: "v1.0.2",
-      asset: "Share-Me-Rowell-1.0.2.apk",
+      tag: "v1.0.4",
+      asset: "Share-Mode-1.0.4.apk",
     },
     {
       projectId: "share-mode",
       platform: "windows",
-      tag: "v1.0.2",
-      asset: "Share-Me-Rowell-Windows-1.0.2.zip",
+      tag: "v1.0.4",
+      asset: "Share-Mode-Windows-1.0.4.zip",
     },
   ];
   await Promise.all(approved.map(verifyRelease));

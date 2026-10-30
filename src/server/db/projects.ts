@@ -74,6 +74,9 @@ export async function getPublicProjects(): Promise<Project[]> {
       }
       const tags = Object.values(approvedTags);
       const sameTag = tags.length > 0 && tags.every((tag) => tag === tags[0]);
+      const approvedRelease = sameTag
+        ? `${project.repository}/releases/tag/${encodeURIComponent(tags[0])}`
+        : `${project.repository}/releases`;
       return {
         ...project,
         approvedTags,
@@ -83,14 +86,12 @@ export async function getPublicProjects(): Promise<Project[]> {
             : null
           : project.version,
         releaseLabel:
-          tags.length &&
-          (!sameTag ||
-            tags[0] !== (project.id === "mh-tri" ? "rowell-1.4.13" : "v1.0.2"))
+          tags.length && approvedRelease !== project.release
             ? "Owner-approved public release"
             : project.releaseLabel,
         release:
           tags.length && project.release
-            ? `${project.repository}/releases`
+            ? approvedRelease
             : project.release,
         summary:
           typeof record?.summary === "string"
