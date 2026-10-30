@@ -144,7 +144,7 @@ export function ProjectSpotlight({
       </div>
       {reduced && (
         <span id={`${id}-motion`} className="sr-only">
-          Reduced motion is enabled. Play cycles through the projects without
+          Animations are off. Play cycles through the projects without
           animation.
         </span>
       )}

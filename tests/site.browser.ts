@@ -37,6 +37,7 @@ test("landscape, zoom, reduced motion, filters and keyboard navigation", async (
 }) => {
   await page.setViewportSize({ width: 844, height: 390 });
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => localStorage.setItem("rowell-mode:site-motion", "reduced"));
   await page.goto("/");
   await expect(
     page.getByRole("heading", { name: /A little curiosity/ }),

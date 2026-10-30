@@ -8,10 +8,7 @@ import { PinPad } from "./PinPad";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { queueSignInNotice } from "../lib/owner-notice";
 import { toast } from "sonner";
-import {
-  useWelcomeMotion,
-  type WelcomeMotion,
-} from "../hooks/useWelcomeMotion";
+import { useMotionPreference, type MotionPreference } from "@/features/appearance/hooks/useMotionPreference";
 import {
   defaultWelcomeScene,
   welcomeScenes,
@@ -56,7 +53,7 @@ export function OwnerSignIn({
   const [welcome, setWelcome] = useState(false);
   const [preview, setPreview] = useState(false);
   const [sceneChoice, setSceneChoice] = useState<WelcomeScene | null>(null);
-  const { motion, setMotion } = useWelcomeMotion();
+  const { preference, setPreference } = useMotionPreference();
   const storedScene = useSyncExternalStore(
     subscribe,
     savedScene,
@@ -268,14 +265,13 @@ export function OwnerSignIn({
           ))}
         </div>
         <label className={`field ${styles.motionChoice}`}>
-          Entrance animation
+          Animations on this device
           <select
-            value={motion}
-            onChange={(event) => setMotion(event.target.value as WelcomeMotion)}
+            value={preference}
+            onChange={(event) => setPreference(event.target.value as MotionPreference)}
           >
-            <option value="system">Use device setting</option>
-            <option value="full">Full cinematic animation</option>
-            <option value="still">Still view</option>
+            <option value="full">On</option>
+            <option value="reduced">Off</option>
           </select>
         </label>
         <button
@@ -290,16 +286,12 @@ export function OwnerSignIn({
       {welcome && (
         <BossWelcome
           scene={scene}
-          motion={motion}
-          onMotionChange={setMotion}
           onComplete={enterWorkspace}
         />
       )}
       {preview && (
         <BossWelcome
           scene={scene}
-          motion={motion}
-          onMotionChange={setMotion}
           preview
           onComplete={closePreview}
         />

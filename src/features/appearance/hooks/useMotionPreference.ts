@@ -1,39 +1,38 @@
 "use client";
 import { useSyncExternalStore } from "react";
+import { animationStorageKey, legacyEntranceStorageKey, type MotionPreference } from "../model/animation-preference";
 
-export type MotionPreference = "system" | "full" | "reduced";
-const key = "rowell-mode:site-motion";
+export type { MotionPreference } from "../model/animation-preference";
 const eventName = "rowell-mode:site-motion-changed";
 let memory: MotionPreference | undefined;
-function preference(): MotionPreference {
+export function readMotionPreference(): MotionPreference {
   if (memory) return memory;
   try {
-    const value = window.localStorage.getItem(key);
-    return value === "full" || value === "reduced" ? value : "system";
-  } catch { return "system"; }
-}
-function snapshot() {
-  return `${preference()}:${window.matchMedia("(prefers-reduced-motion: reduce)").matches}`;
+    const value = window.localStorage.getItem(animationStorageKey);
+    if (value === "full" || value === "reduced") return value;
+    return window.localStorage.getItem(legacyEntranceStorageKey) === "still" ? "reduced" : "full";
+  } catch { return "full"; }
 }
 function subscribe(changed: () => void) {
-  const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const storage = () => { memory = undefined; changed(); };
+  const storage = (event: StorageEvent) => {
+    if (event.key === null || event.key === animationStorageKey || event.key === legacyEntranceStorageKey) {
+      memory = undefined;
+      changed();
+    }
+  };
   window.addEventListener("storage", storage);
   window.addEventListener(eventName, changed);
-  media.addEventListener("change", changed);
   return () => {
     window.removeEventListener("storage", storage);
     window.removeEventListener(eventName, changed);
-    media.removeEventListener("change", changed);
   };
 }
 export function useMotionPreference() {
-  const current = useSyncExternalStore(subscribe, snapshot, () => "system:true");
-  const [mode, systemReduced] = current.split(":") as [MotionPreference, string];
+  const mode = useSyncExternalStore(subscribe, readMotionPreference, () => "full" as MotionPreference);
   function setPreference(value: MotionPreference) {
     memory = value;
-    try { window.localStorage.setItem(key, value); } catch { /* This tab still supports the chosen display preference. */ }
+    try { window.localStorage.setItem(animationStorageKey, value); } catch { /* This tab still supports the chosen display preference. */ }
     window.dispatchEvent(new Event(eventName));
   }
-  return { preference: mode, reduced: mode === "reduced" || (mode === "system" && systemReduced === "true"), setPreference };
+  return { preference: mode, reduced: mode === "reduced", setPreference };
 }

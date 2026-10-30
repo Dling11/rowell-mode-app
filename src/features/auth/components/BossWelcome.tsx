@@ -14,7 +14,6 @@ import {
   welcomeScenes,
   type WelcomeScene,
 } from "../model/welcome-scenes";
-import type { WelcomeMotion } from "../hooks/useWelcomeMotion";
 import styles from "./BossWelcome.module.css";
 import { useWelcomeSequence } from "../hooks/useWelcomeSequence";
 import { useMotionPreference } from "@/features/appearance/hooks/useMotionPreference";
@@ -36,24 +35,17 @@ function Letters({ text }: { text: string }) {
 export function BossWelcome({
   scene = defaultWelcomeScene,
   preview = false,
-  motion = "system",
-  onMotionChange,
   onComplete,
 }: {
   scene?: WelcomeScene;
   preview?: boolean;
-  motion?: WelcomeMotion;
-  onMotionChange?: (value: WelcomeMotion) => void;
   onComplete: () => void;
 }) {
   const descriptionId = useId();
-  const { reduced } = useMotionPreference();
-  const [override, setOverride] = useState<WelcomeMotion | null>(null);
+  const { reduced, setPreference } = useMotionPreference();
   const [ready, setReady] = useState(false);
   const [run, setRun] = useState(0);
-  const preference = override || motion;
-  const animate =
-    preference === "full" || (preference === "system" && !reduced);
+  const animate = !reduced;
   const { scope, move, leave } = useWelcomeSequence({ enabled: animate, ready, run, preview });
   const selected =
     welcomeScenes.find((item) => item.id === scene) ||
@@ -68,9 +60,8 @@ export function BossWelcome({
     const timer = window.setTimeout(onComplete, welcomeDurationMs);
     return () => window.clearTimeout(timer);
   }, [onComplete, preview, ready, animate, run]);
-  function changeMotion(value: WelcomeMotion) {
-    setOverride(value);
-    onMotionChange?.(value);
+  function changeMotion(value: "full" | "still") {
+    setPreference(value === "still" ? "reduced" : "full");
     setRun((value) => value + 1);
   }
   return (

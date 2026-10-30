@@ -70,6 +70,7 @@ test("entrance samples preview without signing in and stay usable with reduced m
     if (request.url().includes("/api/auth/sign-in")) signIns++;
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => localStorage.setItem("rowell-mode:site-motion", "reduced"));
   await page.setViewportSize({ width: 320, height: 844 });
   await page.goto(login);
   await page

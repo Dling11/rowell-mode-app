@@ -196,10 +196,10 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .frame img {
+  :global(html:not([data-motion="full"])) .frame img {
     transition: none;
   }
-  .photo:hover img {
+  :global(html:not([data-motion="full"])) .photo:hover img {
     transform: none;
   }
 }

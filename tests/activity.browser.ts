@@ -11,7 +11,10 @@ function deferred() {
 for (const width of [1440, 320]) {
   test(`navigation shows feedback while a platform response waits and clears on completion at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    if (width === 320) await page.emulateMedia({ reducedMotion: "reduce" });
+    if (width === 320) {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.addInitScript(() => localStorage.setItem("rowell-mode:site-motion", "reduced"));
+    }
     const gate = deferred();
     await page.route("**/downloads?**", async (route) => {
       if (new URL(route.request().url()).searchParams.get("platform") === "windows") await gate.promise;

@@ -52,16 +52,19 @@ test("photo viewer fits a phone and exposes usable keyboard and close controls",
   await expect(page.locator(".yarl__root")).toHaveCount(0);
 });
 
-test("an explicit Motion On preference restores animation on a reduced-motion device", async ({ page }) => {
+test("animations default to On and the local On/Off choice survives refresh", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
+  await expect(page.getByLabel("Animations on this device")).toHaveValue("full");
+  await expect(page.getByRole("button", { name: "Pause spotlight", exact: true })).toBeVisible();
+  await page.getByLabel("Animations on this device").selectOption("reduced");
   await expect(page.getByRole("button", { name: "Play spotlight", exact: true })).toBeVisible();
-  await page.getByLabel("Site animation").selectOption("full");
+  await page.getByLabel("Animations on this device").selectOption("full");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "full");
   await expect(page.getByRole("button", { name: "Pause spotlight", exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByLabel("Site animation")).toHaveValue("full");
-  await page.getByLabel("Site animation").selectOption("reduced");
+  await expect(page.getByLabel("Animations on this device")).toHaveValue("full");
+  await page.getByLabel("Animations on this device").selectOption("reduced");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "reduced");
   await expect(page.getByRole("button", { name: "Play spotlight", exact: true })).toBeVisible();
 });

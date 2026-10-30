@@ -217,12 +217,12 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .card {
+  :global(html:not([data-motion="full"])) .card {
     animation: none;
     transform: none;
   }
-  .slide,
-  .dots button span {
+  :global(html:not([data-motion="full"])) .slide,
+  :global(html:not([data-motion="full"])) .dots button span {
     transition: none;
   }
 }

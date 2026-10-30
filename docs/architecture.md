@@ -72,8 +72,10 @@ reflect their request state; owner notifications use Sonner. Motion for React's 
 API coordinates the welcome camera and text, loaded with the entrance. The photo
 viewer uses Yet Another React Lightbox with zoom, captions and fullscreen plugins,
 loaded only when a photo opens. Public pages keep their server-rendered content and
-private routes are not prefetched. The Motion control stores only a display choice;
-Device setting respects reduced motion, and On is an explicit animation opt-in.
+private routes are not prefetched. Animations default to On. The On/Off setting is
+saved only in this browser on this device and applies to the spotlight, loaders,
+photo viewer and login entrance. Off uses a simpler, still presentation. The choice
+is applied before paint, survives reloads and is independent of the owner account.
 
 Project resources are validated external references, separate from installer approval.
 Resource edits retain the latest 50 dated link snapshots in the owner workspace.

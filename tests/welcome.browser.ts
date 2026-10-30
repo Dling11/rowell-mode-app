@@ -91,7 +91,7 @@ test("automatic entry waits for the full sequence instead of navigating during t
   await expect(page).toHaveURL("http://127.0.0.1:3105/gallery");
 });
 
-test("a reduced-motion visitor can explicitly play full animation and keep that choice", async ({
+test("the shared animation setting controls the entrance and keeps the chosen mode", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -100,6 +100,7 @@ test("a reduced-motion visitor can explicitly play full animation and keep that 
     .locator("summary")
     .filter({ hasText: "Choose your entrance" })
     .click();
+  await page.getByLabel("Animations on this device").selectOption("reduced");
   await page.getByRole("button", { name: "Preview entrance" }).click();
   const entrance = page.getByRole("dialog");
   await expect(entrance).toHaveAttribute("data-motion", "still");
@@ -118,7 +119,7 @@ test("a reduced-motion visitor can explicitly play full animation and keep that 
     .locator("summary")
     .filter({ hasText: "Choose your entrance" })
     .click();
-  await expect(page.getByLabel("Entrance animation")).toHaveValue("full");
+  await expect(page.getByLabel("Animations on this device")).toHaveValue("full");
   await page.getByRole("button", { name: "Preview entrance" }).click();
   await expect(entrance).toHaveAttribute("data-motion", "full");
   await entrance

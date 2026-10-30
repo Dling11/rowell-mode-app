@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 
-test("reduced-motion visitors can enable a full loop and keep that choice after refresh", async ({
+test("with animations Off visitors can enable a full loop and keep playback after refresh", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => localStorage.setItem("rowell-mode:site-motion", "reduced"));
   await page.clock.install();
   await page.goto("/");
   const carousel = page.getByRole("region", { name: "Project spotlight" });
@@ -50,6 +51,7 @@ test("Play still works when browser preference storage is blocked", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => {
+    localStorage.setItem("rowell-mode:site-motion", "reduced");
     const getItem = Storage.prototype.getItem;
     const setItem = Storage.prototype.setItem;
     Storage.prototype.getItem = function (key) {

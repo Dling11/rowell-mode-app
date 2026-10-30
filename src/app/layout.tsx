@@ -3,6 +3,7 @@ import { ServiceWorkerRegistration } from "@/features/install/components/Service
 import { site } from "@/data/site";
 import "@/styles/globals.css";
 import { MotionPreferenceSync } from "@/features/appearance/components/MotionPreferenceSync";
+import { initialAnimationPreference } from "@/features/appearance/model/animation-preference";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -17,5 +18,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#0b1220", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><a className="skip-link" href="#main">Skip to content</a><MotionPreferenceSync/>{children}<ServiceWorkerRegistration/></body></html>;
+  return <html lang="en" data-motion="full" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: initialAnimationPreference }}/></head><body><a className="skip-link" href="#main">Skip to content</a><MotionPreferenceSync/>{children}<ServiceWorkerRegistration/></body></html>;
 }

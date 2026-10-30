@@ -50,10 +50,11 @@ test("spotlight rotates, pauses and supports manual project selection", async ({
   ).toBeVisible();
 });
 
-test("reduced motion starts paused while manual controls and Play remain usable", async ({
+test("animations Off starts paused while manual controls and Play remain usable", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => localStorage.setItem("rowell-mode:site-motion", "reduced"));
   await page.clock.install();
   await page.goto("/");
   const spotlight = page.getByRole("region", { name: "Project spotlight" });
