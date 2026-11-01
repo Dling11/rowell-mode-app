@@ -82,15 +82,15 @@ export async function getPublicProjects(): Promise<Project[]> {
         approvedTags,
         version: tags.length
           ? sameTag
-            ? tags[0].replace(/^rowell-|^v/, "")
+            ? tags[0].replace(/^rowell-|^low-spec-|^v/, "")
             : null
           : project.version,
         releaseLabel:
-          tags.length && approvedRelease !== project.release
+          !project.experimental && tags.length && approvedRelease !== project.release
             ? "Owner-approved public release"
             : project.releaseLabel,
         release:
-          tags.length && project.release
+          tags.length
             ? approvedRelease
             : project.release,
         summary:

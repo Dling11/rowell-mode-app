@@ -3,6 +3,7 @@ import { Swords } from "lucide-react";
 
 const icons: Record<string, string> = {
   "mh-tri": "/images/mh-tri-icon.png",
+  "mh-tri-low-spec": "/images/mh-tri-icon.png",
   "share-mode": "/images/share-mode-icon.svg",
 };
 

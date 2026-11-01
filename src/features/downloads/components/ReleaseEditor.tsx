@@ -37,7 +37,7 @@ export function ReleaseEditor() {
       <h2>Approved download pointers</h2>
       <p>
         Manual pins only. Prereleases are supported; arbitrary “latest” releases
-        aren’t promoted. MH4U stays source only.
+        aren’t promoted. Low Spec has its own Android pin; the standard Tri pins stay separate. MH4U stays source only.
       </p>
       <QueryState
         loading={query.isLoading} fetching={query.isFetching}
@@ -90,12 +90,14 @@ export function ReleaseEditor() {
                 setPointer({
                   ...pointer,
                   projectId: e.target.value as ReleasePointer["projectId"],
+                  platform: e.target.value === "mh-tri-low-spec" ? "android" : pointer.platform,
                   tag: "",
                   asset: "",
                 })
               }
             >
               <option value="mh-tri">MH Tri</option>
+              <option value="mh-tri-low-spec">MH3 - Low Spec · ARM 32-bit</option>
               <option value="share-mode">Share Mode</option>
             </select>
           </label>
@@ -112,7 +114,7 @@ export function ReleaseEditor() {
               }
             >
               <option value="android">Android APK</option>
-              <option value="windows">Windows ZIP</option>
+              {pointer.projectId !== "mh-tri-low-spec" && <option value="windows">Windows ZIP</option>}
             </select>
           </label>
         </div>

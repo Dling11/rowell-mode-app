@@ -33,6 +33,8 @@ test("spotlight continues after manual selection and loops back to the first pro
     spotlight.getByRole("heading", { name: "Monster Hunter 4 — Rowell" }),
   ).toBeVisible();
   await page.clock.fastForward(4900);
+  await expect(spotlight.getByRole("heading", { name: "MH3 - Low Spec", exact: true })).toBeVisible();
+  await page.clock.fastForward(4900);
   await expect(
     spotlight.getByRole("heading", { name: "MH Tri — Rowell" }),
   ).toBeVisible();
@@ -57,7 +59,7 @@ test("Tri resources are external references and Android includes MH4U without an
   await page.goto("/downloads?platform=android");
   await expect(
     page.getByRole("list", { name: "Project packages" }).getByRole("listitem"),
-  ).toHaveCount(3);
+  ).toHaveCount(4);
   await expect(
     page.getByRole("heading", { name: "Monster Hunter 4 — Rowell" }),
   ).toBeVisible();

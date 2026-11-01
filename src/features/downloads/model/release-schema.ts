@@ -1,7 +1,7 @@
 import { z } from "zod";
 export const releasePointerSchema = z
   .object({
-    projectId: z.enum(["mh-tri", "share-mode"]),
+    projectId: z.enum(["mh-tri", "mh-tri-low-spec", "share-mode"]),
     platform: z.enum(["android", "windows"]),
     tag: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/),
     asset: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/),
@@ -13,6 +13,14 @@ export const releasePointerSchema = z
         ? pointer.asset.endsWith(".apk")
         : pointer.asset.endsWith(".zip"),
     "Asset must match the platform.",
+  )
+  .refine(
+    (pointer) => pointer.projectId !== "mh-tri-low-spec" || (
+      pointer.platform === "android" &&
+      /^low-spec-[A-Za-z0-9._-]+$/.test(pointer.tag) &&
+      /^MH3-Low-Spec-[A-Za-z0-9._-]+-armeabi-v7a\.apk$/.test(pointer.asset)
+    ),
+    "Low Spec requires its own low-spec release tag and ARMv7 Android APK.",
   );
 export type ReleasePointer = z.infer<typeof releasePointerSchema>;
 
@@ -33,6 +41,7 @@ const releaseSchema = z.object({
 
 export const repositories = {
   "mh-tri": "Dling11/monster_hunter_tri_emulator",
+  "mh-tri-low-spec": "Dling11/monster_hunter_tri_emulator",
   "share-mode": "Dling11/share-me-rowell",
 } as const;
 

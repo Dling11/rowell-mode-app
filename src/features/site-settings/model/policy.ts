@@ -4,7 +4,7 @@ export const modeSchema = z.enum(["normal", "downloads-paused", "maintenance"]);
 export const settingsSchema = z
   .object({
     mode: modeSchema,
-    pausedProjects: z.array(z.enum(["mh-tri", "share-mode", "mh4u"])).max(3),
+    pausedProjects: z.array(z.enum(["mh-tri", "mh-tri-low-spec", "share-mode", "mh4u"])).max(4),
     message: z.string().trim().max(180),
   })
   .strict();

@@ -74,3 +74,10 @@
 .download > svg {
   flex-shrink: 0;
 }
+.related {
+  border-top: 1px solid var(--border);
+  margin-top: 22px;
+  padding-top: 18px;
+}
+.related p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.related small { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; }

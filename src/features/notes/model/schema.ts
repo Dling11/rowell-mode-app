@@ -24,7 +24,7 @@ export const publishNoteSchema = z
   .object({
     id: z.string().uuid(),
     updatedAt: z.string().datetime(),
-    projectId: z.enum(["personal", "mh-tri", "share-mode", "mh4u"]),
+    projectId: z.enum(["personal", "mh-tri", "mh-tri-low-spec", "share-mode", "mh4u"]),
     status: z.enum(["In progress", "In testing", "Released", "On hold"]),
   })
   .strict();

@@ -34,7 +34,7 @@ for (const width of [1440, 320]) {
     await expect(page.getByRole("list", { name: "Project packages" }).getByRole("listitem")).toHaveCount(2);
     await expect(page.locator("[data-navigation-pending]")).toHaveCount(0);
     await page.goBack();
-    await expect(page.getByRole("list", { name: "Project packages" }).getByRole("listitem")).toHaveCount(5);
+    await expect(page.getByRole("list", { name: "Project packages" }).getByRole("listitem")).toHaveCount(6);
     await expect(page.locator("[data-navigation-pending]")).toHaveCount(0);
   });
 }

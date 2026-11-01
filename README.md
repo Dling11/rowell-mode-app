@@ -8,6 +8,10 @@ Redux Toolkit / RTK Query, Radix dialogs and Sonner. Styling uses CSS Modules.
 MongoDB Atlas stores records and policy; Cloudinary receives signed image uploads.
 Installers remain on GitHub Releases.
 
+Tri Low Spec is listed separately from the standard Android ARM64 and Windows
+packages. Its experimental ARMv7 download stays unavailable until the matching
+public source and APK have a separate verified release approval.
+
 ## Local development
 
 Use Node.js 24 LTS and npm.

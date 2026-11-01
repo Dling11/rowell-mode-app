@@ -13,13 +13,16 @@ import {
 } from "@/features/site-settings/model/policy";
 import styles from "@/features/downloads/components/Downloads.module.css";
 import { DownloadLink } from "./DownloadLink";
+import Link from "@/components/ui/AppLink";
 
 export function DownloadPanel({
   project,
   policy,
+  relatedProject,
 }: {
   project: Project;
   policy: SitePolicy;
+  relatedProject?: Project;
 }) {
   const allowed = downloadsAllowed(policy, project.id);
   return (
@@ -56,6 +59,7 @@ export function DownloadPanel({
                     <Monitor size={17} />
                   )}{" "}
                   {platform === "android" ? "Android APK" : "Windows ZIP"}
+                  {project.packageLabels?.[platform] && <small>{project.packageLabels[platform]}</small>}
                   {project.approvedTags?.[platform] && (
                     <small>{project.approvedTags[platform]}</small>
                   )}
@@ -84,12 +88,13 @@ export function DownloadPanel({
       ) : (
         <>
           <p className={styles.hint}>
-            There’s no public APK yet. You can explore the source and follow the
-            project on GitHub.
+            {project.experimental
+              ? "Downloads for this experimental app are temporarily unavailable. You can explore its source code on the separate Low Spec branch."
+              : "There’s no public APK yet. You can explore the source and follow the project on GitHub."}
           </p>
           <a
             className={`button secondary ${styles.download}`}
-            href={project.repository}
+            href={project.sourceUrl || project.repository}
             target="_blank"
             rel="noreferrer"
           >
@@ -109,6 +114,13 @@ export function DownloadPanel({
           <span className="sr-only"> (opens a new tab)</span>
         </a>
       )}
+      {relatedProject && <div className={styles.related}>
+        <p>{project.experimental ? "Using a 64-bit Android device or a PC?" : "Need an Android 32-bit build?"}</p>
+        <Link className="text-link" href={`/projects/${relatedProject.id}`}>
+          {relatedProject.name} <ArrowUpRight size={13} />
+        </Link>
+        {relatedProject.experimental && <small>Experimental · Separate app and saves</small>}
+      </div>}
     </section>
   );
 }

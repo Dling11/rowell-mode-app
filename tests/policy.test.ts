@@ -44,3 +44,18 @@ test("click accounting excludes HEAD, prefetch and obvious automation",()=>{
   const excludedHeaders:Record<string,string>[]=[{purpose:"prefetch"},{"sec-purpose":"prefetch;prerender"},{"next-router-prefetch":"1"},{"user-agent":"Googlebot"},{"user-agent":"HeadlessChrome"}];
   for(const headers of excludedHeaders) assert.equal(shouldCountRequest(request(headers)),false);
 });
+
+test("Low Spec is a separate Android-only approval with its own tag, asset and pause",()=>{
+  const low:ReleasePointer={projectId:"mh-tri-low-spec",platform:"android",tag:"low-spec-0.1.2",asset:"MH3-Low-Spec-0.1-armeabi-v7a.apk"};
+  assert.equal(releasePointerSchema.safeParse(low).success,true);
+  for(const patch of [{platform:"windows"},{tag:pointer.tag},{asset:pointer.asset}]) {
+    assert.equal(releasePointerSchema.safeParse({...low,...patch}).success,false);
+  }
+  const lowUrl=`https://github.com/Dling11/monster_hunter_tri_emulator/releases/download/${low.tag}/${low.asset}`;
+  assert.equal(validatePublishedAsset({...release,tag_name:low.tag,assets:[{...release.assets[0],name:low.asset,browser_download_url:lowUrl}]},low).url,lowUrl);
+  assert.equal(validatePublishedAsset(release,pointer).url,url);
+  const parsed=settingsSchema.parse({...defaultSettings,pausedProjects:["mh-tri-low-spec"]});
+  assert.equal(downloadsAllowed({...parsed,available:true,configured:true},low.projectId),false);
+  assert.equal(downloadsAllowed({...parsed,available:true,configured:true},pointer.projectId),true);
+  assert.equal(projects.find(p=>p.id===low.projectId)?.release,null);
+});

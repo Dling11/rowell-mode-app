@@ -78,7 +78,7 @@ test("download list filters public packages and keeps source-only builds unavail
 }) => {
   await page.goto("/downloads");
   const list = page.getByRole("list", { name: "Project packages" });
-  await expect(list.getByRole("listitem")).toHaveCount(5);
+  await expect(list.getByRole("listitem")).toHaveCount(6);
   await expect(
     list.getByRole("button", { name: /download is unavailable/ }),
   ).toHaveCount(4);

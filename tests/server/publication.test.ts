@@ -6,6 +6,7 @@ import { getPublicProjects } from "../../src/server/db/projects";
 import { publishNoteCopy } from "../../src/server/db/note-publication";
 import { GET as publicImage } from "../../src/app/media/[id]/route";
 import { defaultSettings } from "../../src/features/site-settings/model/policy";
+import { HEAD as download } from "../../src/app/download/[project]/[platform]/route";
 
 type Row = Record<string, unknown>;
 function matches(row: Row, query: Row): boolean {
@@ -240,6 +241,61 @@ test("project release notes follow the approved platform versions, including old
     for (const [key, value] of Object.entries({ MONGODB_URI: oldEnv.uri, MONGODB_DB: oldEnv.db })) {
       if (value === undefined) delete process.env[key];
       else process.env[key] = value;
+    }
+  }
+});
+
+test("Low Spec stays unpublished without its own pin and cannot change standard downloads", async () => {
+  const oldEnv = { uri: process.env.MONGODB_URI, db: process.env.MONGODB_DB, mode: process.env.SITE_MODE, token: process.env.GITHUB_RELEASE_TOKEN };
+  const oldPromise = global.hubMongoPromise;
+  const originalFetch = global.fetch;
+  const standard = { projectId: "mh-tri", platform: "android", tag: "rowell-1.4.13", asset: "MH3_Rowell_Dev-arm64.apk" };
+  const low = { projectId: "mh-tri-low-spec", platform: "android", tag: "low-spec-0.1.2", asset: "MH3-Low-Spec-0.1-armeabi-v7a.apk" };
+  const releases: Row[] = [{ projectId: standard.projectId, platform: "android", pointer: standard }];
+  const policy = { ...defaultSettings, pausedProjects: [] as string[] };
+  const db = memoryDatabase({ releases, settings: [{ key: "site", value: policy }] });
+  process.env.MONGODB_URI = "mongodb://isolated.invalid";
+  process.env.MONGODB_DB = "isolated-low-spec-download-test";
+  delete process.env.SITE_MODE;
+  delete process.env.GITHUB_RELEASE_TOKEN;
+  global.hubMongoPromise = Promise.resolve({ db: () => db } as unknown as MongoClient);
+  const assetUrl = (pointer: typeof standard) => `https://github.com/Dling11/monster_hunter_tri_emulator/releases/download/${pointer.tag}/${pointer.asset}`;
+  let calls = 0;
+  global.fetch = async (input) => {
+    calls++;
+    const pointer = String(input).endsWith(low.tag) ? low : standard;
+    return Response.json({ tag_name: pointer.tag, draft: false, prerelease: true, published_at: now, assets: [{ name: pointer.asset, state: "uploaded", size: 20374522, browser_download_url: assetUrl(pointer) }] });
+  };
+  const request = new Request("https://hub.example/download/mh-tri-low-spec/android", { method: "HEAD" });
+  const resolve = (project: string, platform = "android") => download(request, { params: Promise.resolve({ project, platform }) });
+  try {
+    assert.equal((await getPublicProjects()).find(p => p.id === low.projectId)!.release, null);
+    assert.equal((await resolve(low.projectId)).status, 503);
+    assert.equal(calls, 0);
+    assert.equal((await resolve(low.projectId, "windows")).status, 404);
+    assert.equal((await resolve("mh4u")).status, 404);
+    releases.push({ projectId: low.projectId, platform: "android", pointer: low });
+    const projects = await getPublicProjects();
+    const lowProject = projects.find(p => p.id === low.projectId)!;
+    assert.equal(lowProject.release, `https://github.com/Dling11/monster_hunter_tri_emulator/releases/tag/${low.tag}`);
+    assert.equal(lowProject.version, "0.1.2");
+    assert.match(lowProject.releaseLabel, /Experimental/);
+    assert.equal(projects.find(p => p.id === "mh-tri")!.version, "1.4.13");
+    assert.equal((await resolve(low.projectId)).headers.get("location"), assetUrl(low));
+    assert.equal((await resolve("mh-tri")).headers.get("location"), assetUrl(standard));
+    policy.pausedProjects.push(low.projectId);
+    assert.equal((await resolve(low.projectId)).status, 503);
+    assert.equal((await resolve("mh-tri")).status, 307);
+    policy.mode = "downloads-paused";
+    assert.equal((await resolve(low.projectId)).status, 503);
+    assert.equal((await resolve("mh-tri")).status, 503);
+    assert.equal(releases.length, 2);
+    assert.deepEqual(releases[0].pointer, standard);
+  } finally {
+    global.fetch = originalFetch;
+    global.hubMongoPromise = oldPromise;
+    for (const [key, value] of Object.entries({ MONGODB_URI: oldEnv.uri, MONGODB_DB: oldEnv.db, SITE_MODE: oldEnv.mode, GITHUB_RELEASE_TOKEN: oldEnv.token })) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
     }
   }
 });

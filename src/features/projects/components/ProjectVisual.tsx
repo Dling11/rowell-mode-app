@@ -12,6 +12,7 @@ export function ProjectVisual({
   large?: boolean;
   coverImage?: { src: string; alt: string };
 }) {
+  const tri = id === "mh-tri" || id === "mh-tri-low-spec";
   if (coverImage)
     return (
       <div
@@ -29,14 +30,14 @@ export function ProjectVisual({
     );
   return (
     <div
-      className={`${styles.visual} ${styles[id === "mh-tri" ? "tri" : id === "share-mode" ? "share" : "mh4"]} ${large ? styles.visualLarge : ""}`}
+      className={`${styles.visual} ${styles[tri ? "tri" : id === "share-mode" ? "share" : "mh4"]} ${large ? styles.visualLarge : ""}`}
       aria-hidden="true"
     >
       <div className={styles.visualGrid} />
       <span className={styles.visualNumber}>
-        {id === "mh-tri" ? "III" : id === "share-mode" ? "↔" : "IV"}
+        {tri ? "III" : id === "share-mode" ? "↔" : "IV"}
       </span>
-      {id === "mh-tri" ? (
+      {tri ? (
         <div className={styles.appIcon}>
           <Image
             src="/images/mh-tri-icon.png"
@@ -56,14 +57,14 @@ export function ProjectVisual({
         </div>
       )}
       <span className={styles.visualCaption}>
-        {id === "mh-tri"
+        {id === "mh-tri-low-spec" ? "LOW SPEC · EXPERIMENTAL" : id === "mh-tri"
           ? "A NEW WAY TO HUNT"
           : id === "share-mode"
             ? "LESS FRICTION. MORE SHARING."
             : "THE NEXT ADVENTURE"}
       </span>
       <span className={styles.visualCorner}>
-        R / {id === "mh-tri" ? "01" : id === "share-mode" ? "02" : "03"}
+        R / {id === "mh-tri-low-spec" ? "04" : id === "mh-tri" ? "01" : id === "share-mode" ? "02" : "03"}
       </span>
     </div>
   );

@@ -83,7 +83,7 @@ export default async function ProjectPage({
             <div className={styles.sourceLinks}>
               <a
                 className="text-link"
-                href={project.repository}
+              href={project.sourceUrl || project.repository}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -105,7 +105,7 @@ export default async function ProjectPage({
           </div>
         </div>
         <aside className={styles.aside}>
-          <DownloadPanel project={project} policy={policy} />
+          <DownloadPanel project={project} policy={policy} relatedProject={projects.find((candidate) => candidate.id === project.relatedProjectId)} />
         </aside>
       </div>
     </main>

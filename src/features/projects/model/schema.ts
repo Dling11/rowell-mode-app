@@ -26,7 +26,7 @@ export const resourceSchema = z
   .strict();
 export const projectEditSchema = z
   .object({
-    projectId: z.enum(["mh-tri", "share-mode", "mh4u"]),
+    projectId: z.enum(["mh-tri", "mh-tri-low-spec", "share-mode", "mh4u"]),
     summary: z.string().trim().min(1).max(160),
     description: z.string().trim().min(1).max(1200),
     status: z.enum(["Released", "In testing", "In progress", "On hold"]),

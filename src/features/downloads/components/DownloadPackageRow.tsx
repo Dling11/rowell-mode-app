@@ -47,14 +47,14 @@ export function DownloadPackageRow({
         <Link href={`/projects/${project.id}`}>
           <h3>{project.name}</h3>
         </Link>
-        <p>{published ? project.releaseLabel : "In testing · Source only"}</p>
+        <p>{project.experimental ? project.releaseLabel : published ? project.releaseLabel : "In testing · Source only"}</p>
         {project.release ? (
           <a href={project.release} target="_blank" rel="noreferrer">
             Release notes <ArrowUpRight size={11} />
             <span className="sr-only"> (opens a new tab)</span>
           </a>
         ) : (
-          <span className={styles.sourceNote}>No public installer yet</span>
+          <span className={styles.sourceNote}>{project.experimental && paused ? "Downloads temporarily unavailable" : "No public installer yet"}</span>
         )}
       </div>
       <div className={styles.platform}>
@@ -66,11 +66,11 @@ export function DownloadPackageRow({
         <span>
           {platform === "android" ? "Android" : "PC / Windows"}
           <small>
-            {published
+            {project.packageLabels?.[platform] || (published
               ? platform === "android"
                 ? "APK installer"
                 : "Portable ZIP"
-              : "In development"}
+              : "In development")}
           </small>
         </span>
       </div>
@@ -89,7 +89,7 @@ export function DownloadPackageRow({
         ) : (
           <>
             <span className={styles.testingBadge}>In testing</span>
-            <small>No public APK</small>
+            <small>{project.experimental ? paused ? "Downloads paused" : "Release pending" : "No public APK"}</small>
           </>
         )}
       </div>

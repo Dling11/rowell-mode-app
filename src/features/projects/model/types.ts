@@ -13,12 +13,16 @@ export type Project = {
   version: string | null;
   releaseLabel: string;
   repository: string;
+  sourceUrl?: string;
   release: string | null;
   credits: string | null;
   attribution: string;
   highlights: string[];
   setup: string[];
   releaseDate: string | null;
+  experimental?: boolean;
+  relatedProjectId?: string;
+  packageLabels?: Partial<Record<Platform, string>>;
   approvedTags?: Partial<Record<Platform, string>>;
   resources?: ProjectResource[];
   resourceUpdatedAt?: string;
