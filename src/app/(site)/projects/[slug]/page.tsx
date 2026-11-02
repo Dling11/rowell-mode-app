@@ -7,6 +7,7 @@ import { getPublicProjects } from "@/server/db/projects";
 import { getSitePolicy } from "@/server/site-policy/service";
 import { ProjectVisual } from "@/features/projects/components/ProjectVisual";
 import { ProjectResources } from "@/features/projects/components/ProjectResources";
+import { getProjectWhatsNew } from "@/features/projects/model/release-notes";
 import { DownloadPanel } from "@/features/downloads/components/DownloadPanel";
 import styles from "@/app/(site)/projects/[slug]/page.module.css";
 
@@ -33,7 +34,7 @@ export default async function ProjectPage({
   ]);
   const project = projects.find((p) => p.id === slug);
   if (!project) notFound();
-  const whatsNew = project.whatsNew?.version === project.version ? project.whatsNew : undefined;
+  const whatsNew = getProjectWhatsNew(project);
   return (
     <main id="main" className="container">
       <Link href="/projects" className={styles.back}>

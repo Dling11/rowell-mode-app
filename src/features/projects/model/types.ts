@@ -18,7 +18,7 @@ export type Project = {
   credits: string | null;
   attribution: string;
   highlights: string[];
-  whatsNew?: { version: string; items: string[] };
+  whatsNew?: { version: string; items: string[]; platform?: Platform; tag?: string };
   setup: string[];
   releaseDate: string | null;
   experimental?: boolean;

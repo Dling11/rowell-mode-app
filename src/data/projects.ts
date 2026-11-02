@@ -28,6 +28,17 @@ export const projects: Project[] = [
     credits: "https://github.com/Dling11/monster_hunter_tri_emulator/blob/main/CREDITS.md",
     attribution: "Built on OceanTriRecomp and its contributors, with Aurora rendering services. Existing GPL, component AGPL and third-party notices apply. Monster Hunter Tri belongs to CAPCOM. Game files are not included.",
     highlights: ["English app settings", "Editable touch controls", "Combo buttons & save tools"],
+    whatsNew: {
+      version: "1.4.13-netfix1 · Android",
+      platform: "android",
+      tag: "rowell-1.4.13-netfix1",
+      items: [
+        "Network-interface checks now run in the background to avoid blocking gameplay during online play.",
+        "Tested on a POCO F5 with Android 15: the player confirmed the repeating online-city freezes were gone. Results may vary on other devices.",
+        "Save inside Tri, then install over the existing app. Your progress, controls and online identity stay compatible.",
+        "Windows remains on 1.4.13. This update is for the Android app.",
+      ],
+    },
     setup: ["Choose the Android APK or Windows portable ZIP for your device.", "Install the APK on Android, or extract the portable ZIP on Windows.", "Provide your own compatible game files. Game language is separate from the app settings."],
     releaseDate: "2026-10-28T16:35:04Z",
     resources: [
