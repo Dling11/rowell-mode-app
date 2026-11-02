@@ -33,6 +33,7 @@ export default async function ProjectPage({
   ]);
   const project = projects.find((p) => p.id === slug);
   if (!project) notFound();
+  const whatsNew = project.whatsNew?.version === project.version ? project.whatsNew : undefined;
   return (
     <main id="main" className="container">
       <Link href="/projects" className={styles.back}>
@@ -57,9 +58,9 @@ export default async function ProjectPage({
             coverImage={project.coverImage}
           />
           <section className={styles.section}>
-            <h2>The small details matter.</h2>
+            <h2>{whatsNew ? `What's new in ${whatsNew.version}` : "The small details matter."}</h2>
             <ul className={styles.highlights}>
-              {project.highlights.map((h) => (
+              {(whatsNew?.items || project.highlights).map((h) => (
                 <li key={h}>
                   <Check size={15} />
                   {h}

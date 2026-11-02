@@ -18,6 +18,7 @@ export type Project = {
   credits: string | null;
   attribution: string;
   highlights: string[];
+  whatsNew?: { version: string; items: string[] };
   setup: string[];
   releaseDate: string | null;
   experimental?: boolean;
