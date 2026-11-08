@@ -29,12 +29,13 @@ export const projects: Project[] = [
     attribution: "Built on OceanTriRecomp and its contributors, with Aurora rendering services. Existing GPL, component AGPL and third-party notices apply. Monster Hunter Tri belongs to CAPCOM. Game files are not included.",
     highlights: ["English app settings", "Editable touch controls", "Combo buttons & save tools"],
     whatsNew: {
-      version: "1.4.13-netfix1 · Android",
+      version: "1.4.13-netfix2 · Android",
       platform: "android",
-      tag: "rowell-1.4.13-netfix1",
+      tag: "rowell-1.4.13-netfix2",
       items: [
-        "Network-interface checks now run in the background to avoid blocking gameplay during online play.",
-        "Tested on a POCO F5 with Android 15: the player confirmed the repeating online-city freezes were gone. Results may vary on other devices.",
+        "Fixes City error 11612 observed on a Samsung Galaxy A31 by allowing the complete login reply to be sent.",
+        "The functional fix entered Loc Lac on the A31 running Android 12 and passed 15 targeted networking checks. Full online quests and wider device coverage remain unverified.",
+        "Keeps the earlier POCO F5 fix for repeating online freezes. Results may vary by device and network.",
         "Save inside Tri, then install over the existing app. Your progress, controls and online identity stay compatible.",
         "Windows remains on 1.4.13. This update is for the Android app.",
       ],

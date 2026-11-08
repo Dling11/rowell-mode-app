@@ -6,11 +6,11 @@ import { getProjectWhatsNew } from "../src/features/projects/model/release-notes
 test("Android hotfix notes follow its approval when Windows uses an older release", () => {
   const tri = projects.find((project) => project.id === "mh-tri")!;
   const approved = { ...tri, version: null, approvedTags: {
-    android: "rowell-1.4.13-netfix1", windows: "rowell-1.4.13",
+    android: "rowell-1.4.13-netfix2", windows: "rowell-1.4.13",
   } };
   assert.equal(getProjectWhatsNew(approved), tri.whatsNew);
   assert.equal(getProjectWhatsNew({ ...approved, approvedTags: {
-    android: "rowell-1.4.13", windows: "rowell-1.4.13-netfix1",
+    android: "rowell-1.4.13", windows: "rowell-1.4.13-netfix2",
   } }), undefined);
   assert.equal(getProjectWhatsNew({ ...tri, approvedTags: {} }), undefined);
 });
