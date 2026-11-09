@@ -103,7 +103,7 @@ export const projects: Project[] = [
     shortName: "Tri Low Spec",
     category: "Experimental community project",
     summary: "A lighter starting point for ARM 32-bit Android devices.",
-    description: "A separate experimental OceanTriRecomp app for Android with 32-bit ARM support, a 30 FPS default and lower internal resolution. It keeps its own app data and does not replace MH Tri - Rowell. Physical-phone compatibility and performance still need testing.",
+    description: "A separate experimental OceanTriRecomp app for Android with 32-bit ARM support, a 30 FPS default and lower internal resolution. It keeps its own app data and does not replace MH Tri - Rowell. Installation and character creation were checked on a Realme C11; sustained performance and other phones still need testing.",
     status: "In testing",
     platforms: ["android"],
     version: null,
@@ -117,7 +117,7 @@ export const projects: Project[] = [
     credits: "https://github.com/Dling11/monster_hunter_tri_emulator/blob/main/CREDITS.md",
     attribution: "Built on OceanTriRecomp and its contributors, with Aurora rendering services. Existing GPL, component AGPL and third-party notices apply. Monster Hunter Tri belongs to CAPCOM. Game files are not included.",
     highlights: ["ARM 32-bit Android", "30 FPS & lower resolution", "Separate app & save folder"],
-    setup: ["Requires Android 10+, OpenGL ES 3.0 and a system that supports 32-bit ARM apps. A 64-bit-only Android system cannot install this APK.", "Install as MH3 - Low Spec. Its MH3_Low_Spec folder is separate from the standard app. Export and import saved progress if you want to transfer it.", "Select your compatible European/PAL game image. Realme C11 and Infinix X6532 performance is not yet verified; faster gameplay is not guaranteed. A missing head in the character-selection preview remains under investigation."],
+    setup: ["Requires Android 10+, OpenGL ES 3.0 and a system that supports 32-bit ARM apps. A 64-bit-only Android system cannot install this APK.", "Install as MH3 - Low Spec. Its MH3_Low_Spec folder is separate from the standard app. Export and import saved progress if you want to transfer it.", "Select your compatible European/PAL game image and allow room for the image copy and extracted data. Realme C11 and Infinix X6532 sustained performance is not yet verified; faster gameplay is not guaranteed. A missing head in the PC character-selection preview remains under investigation."],
     releaseDate: null,
   },
 ];

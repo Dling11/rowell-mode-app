@@ -9,8 +9,8 @@ MongoDB Atlas stores records and policy; Cloudinary receives signed image upload
 Installers remain on GitHub Releases.
 
 Tri Low Spec is listed separately from the standard Android ARM64 and Windows
-packages. Its experimental ARMv7 download stays unavailable until the matching
-public source and APK have a separate verified release approval.
+packages. Its experimental ARMv7 APK uses a separate verified release approval
+and keeps its own app data. See [Low Spec](https://rowell-mode-app.vercel.app/projects/mh-tri-low-spec) for compatibility and setup.
 
 ## Local development
 
