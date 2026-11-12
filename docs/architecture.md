@@ -15,6 +15,7 @@ src/
     projects/                Public cards, animated spotlight and owner project editor
     downloads/               Public package list, release display and approval editor
     notes/                   Private note editor and explicit public copies
+    research/                Private saved repositories, source snapshots and setup plans
     updates/                 Draft and publication workflow
     uploads/                 Image upload, verification, library and publication
     gallery/                 Server-rendered public photo journal
@@ -95,3 +96,10 @@ username/password credentials and passkeys are independent. PIN management requi
 a fresh server owner session and current password. No PIN/hash enters user DTOs.
 The welcome animation loads only when signing in or explicitly previewing it on the
 login page. Preview state and theme selection never grant access to the workspace.
+
+Research & plans is owner-only at `/admin/research`. Entries in `researchItems`
+keep repository links, notes, setup reviews, a source snapshot and an optional
+reference image. Screenshots use an owner-owned media ID or a trusted GitHub raw
+image reference. Updates use revisions and every API checks the owner and Origin.
+Manual GitHub checks fetch public metadata from fixed GitHub API endpoints; they
+never clone, execute code, update local files or approve public download packages.

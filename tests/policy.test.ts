@@ -54,6 +54,22 @@ test("click accounting excludes HEAD, prefetch and obvious automation",()=>{
   for(const headers of excludedHeaders) assert.equal(shouldCountRequest(request(headers)),false);
 });
 
+test("MDM accepts only the original upstream Windows ZIP and honors pauses",()=>{
+  const mdm = releasePointerSchema.parse({projectId:"mdm",platform:"windows",tag:"v0.5.2",asset:"MisterDownloadManager-0.5.2-portable.zip"});
+  assert.equal(releasePointerSchema.safeParse({...mdm,platform:"android",asset:"MDM.apk"}).success,false);
+  const assetUrl = `https://github.com/anefzaoui/misterdownloadmanager/releases/download/${mdm.tag}/${mdm.asset}`;
+  const payload = {...release,tag_name:mdm.tag,assets:[{...release.assets[0],name:mdm.asset,browser_download_url:assetUrl}]};
+  assert.equal(validatePublishedAsset(payload,mdm).url,assetUrl);
+  assert.throws(()=>validatePublishedAsset({...payload,assets:[{...payload.assets[0],browser_download_url:assetUrl.replace("anefzaoui/misterdownloadmanager","Dling11/IDM_SOURCE_MODDED")}]},mdm));
+  const settings = settingsSchema.parse({...defaultSettings,pausedProjects:["mdm"]});
+  assert.equal(downloadsAllowed({...settings,available:true,configured:true},"mdm"),false);
+  assert.equal(downloadsAllowed({...settings,available:true,configured:true},"mh-tri"),true);
+  const project = projects.find(p => p.id === "mdm")!;
+  assert.deepEqual(project.platforms,["windows"]);
+  assert.match(project.attribution,/Ahmed Nefzaoui/);
+  assert.ok(!JSON.stringify(project).includes("IDM_SOURCE_MODDED"));
+});
+
 test("Low Spec is a separate Android-only approval with its own tag, asset and pause",()=>{
   const low:ReleasePointer={projectId:"mh-tri-low-spec",platform:"android",tag:"low-spec-0.1.2",asset:"MH3-Low-Spec-0.1-armeabi-v7a.apk"};
   assert.equal(releasePointerSchema.safeParse(low).success,true);

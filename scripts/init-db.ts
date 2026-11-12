@@ -18,6 +18,12 @@ async function main() {
   }
   const approved: ReleasePointer[] = [
     {
+      projectId: "mdm",
+      platform: "windows",
+      tag: "v0.5.2",
+      asset: "MisterDownloadManager-0.5.2-portable.zip",
+    },
+    {
       projectId: "mh-tri",
       platform: "android",
       tag: "rowell-1.4.13",
@@ -51,6 +57,9 @@ async function main() {
   });
   console.log(`Initializing database: ${db.databaseName}`);
   await Promise.all([
+    db.collection("researchItems").createIndex({ ownerId: 1, id: 1 }, { unique: true, timeoutMS: 60000 }),
+    db.collection("researchItems").createIndex({ ownerId: 1, repositoryUrl: 1 }, { unique: true, timeoutMS: 60000 }),
+    db.collection("researchItems").createIndex({ ownerId: 1, updatedAt: -1 }, { timeoutMS: 60000 }),
     db
       .collection("settings")
       .createIndex({ key: 1 }, { unique: true, timeoutMS: 60000 }),

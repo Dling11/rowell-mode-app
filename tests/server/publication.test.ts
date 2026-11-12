@@ -301,3 +301,48 @@ test("Low Spec stays unpublished without its own pin and cannot change standard 
     }
   }
 });
+
+test("MDM Windows download requires an exact approval and obeys fresh server pauses", async () => {
+  const oldEnv = { MONGODB_URI: process.env.MONGODB_URI, MONGODB_DB: process.env.MONGODB_DB, SITE_MODE: process.env.SITE_MODE };
+  const oldPromise = global.hubMongoPromise;
+  const originalFetch = global.fetch;
+  const pointer = { projectId: "mdm", platform: "windows", tag: "v0.5.2", asset: "MisterDownloadManager-0.5.2-portable.zip" };
+  const releases: Row[] = [];
+  const policy = { ...defaultSettings, pausedProjects: [] as string[] };
+  const db = memoryDatabase({ releases, settings: [{ key: "site", value: policy }] });
+  process.env.MONGODB_URI = "mongodb://isolated.invalid";
+  process.env.MONGODB_DB = "isolated-mdm-download-test";
+  delete process.env.SITE_MODE;
+  global.hubMongoPromise = Promise.resolve({ db: () => db } as unknown as MongoClient);
+  const url = `https://github.com/anefzaoui/misterdownloadmanager/releases/download/${pointer.tag}/${pointer.asset}`;
+  let calls = 0;
+  global.fetch = async input => {
+    calls++;
+    assert.equal(String(input), "https://api.github.com/repos/anefzaoui/misterdownloadmanager/releases/tags/v0.5.2");
+    return Response.json({ tag_name: pointer.tag, draft: false, prerelease: false, published_at: now, assets: [{ name: pointer.asset, state: "uploaded", size: 19934831, browser_download_url: url }] });
+  };
+  const resolve = (platform = "windows") => download(new Request(`https://hub.example/download/mdm/${platform}`, { method: "HEAD" }), { params: Promise.resolve({ project: "mdm", platform }) });
+  try {
+    assert.equal((await resolve()).status, 503);
+    assert.equal(calls, 0);
+    assert.equal((await resolve("android")).status, 404);
+    releases.push({ projectId: "mdm", platform: "windows", pointer });
+    const response = await resolve();
+    assert.equal(response.status, 307);
+    assert.equal(response.headers.get("location"), url);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    policy.pausedProjects.push("mdm");
+    const previousCalls = calls;
+    assert.equal((await resolve()).status, 503);
+    assert.equal(calls, previousCalls);
+    policy.pausedProjects.length = 0;
+    policy.mode = "maintenance";
+    assert.equal((await resolve()).status, 503);
+  } finally {
+    global.fetch = originalFetch;
+    global.hubMongoPromise = oldPromise;
+    for (const [key, value] of Object.entries(oldEnv)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  }
+});

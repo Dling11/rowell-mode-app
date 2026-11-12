@@ -1,5 +1,6 @@
 .card {
   min-width: 0;
+  overflow: clip;
   padding: 13px;
   border: 1px solid #344961;
   border-radius: 13px;

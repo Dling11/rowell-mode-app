@@ -27,4 +27,7 @@
   from the owner’s Android setup tutorial, not captures of every listed release.
 
 Lucide icons and Radix interaction primitives retain their package licenses.
+Mister Download Manager links the original Windows package by Ahmed Nefzaoui
+and contributors. Its [source, GPL-3.0-or-later license and notices](https://github.com/anefzaoui/misterdownloadmanager)
+remain upstream; it is independent of the proprietary Internet Download Manager.
 Abstract project illustrations are interface artwork. The MH4U previews are gameplay screenshots.

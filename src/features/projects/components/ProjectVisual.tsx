@@ -35,7 +35,7 @@ export function ProjectVisual({
     >
       <div className={styles.visualGrid} />
       <span className={styles.visualNumber}>
-        {tri ? "III" : id === "share-mode" ? "↔" : "IV"}
+        {tri ? "III" : id === "mdm" ? "MDM" : id === "share-mode" ? "↔" : "IV"}
       </span>
       {tri ? (
         <div className={styles.appIcon}>
@@ -47,6 +47,8 @@ export function ProjectVisual({
             priority={large}
           />
         </div>
+      ) : id === "mdm" ? (
+        <div className={styles.swordIcon}><ProjectIcon id="mdm" size={80} /></div>
       ) : id === "share-mode" ? (
         <div className={styles.shareIcon}>
           <ProjectIcon id="share-mode" size={83} />
@@ -57,14 +59,14 @@ export function ProjectVisual({
         </div>
       )}
       <span className={styles.visualCaption}>
-        {id === "mh-tri-low-spec" ? "LOW SPEC · EXPERIMENTAL" : id === "mh-tri"
+        {id === "mdm" ? "OPEN SOURCE. INDEPENDENTLY BUILT." : id === "mh-tri-low-spec" ? "LOW SPEC · EXPERIMENTAL" : id === "mh-tri"
           ? "A NEW WAY TO HUNT"
           : id === "share-mode"
             ? "LESS FRICTION. MORE SHARING."
             : "THE NEXT ADVENTURE"}
       </span>
       <span className={styles.visualCorner}>
-        R / {id === "mh-tri-low-spec" ? "04" : id === "mh-tri" ? "01" : id === "share-mode" ? "02" : "03"}
+        R / {id === "mdm" ? "06" : id === "mh-tri-low-spec" ? "04" : id === "mh-tri" ? "01" : id === "share-mode" ? "02" : "03"}
       </span>
     </div>
   );

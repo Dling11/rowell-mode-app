@@ -28,6 +28,7 @@ export const adminApi = createApi({
     "Releases",
     "Media",
     "GameSaves",
+    "Research",
   ],
   endpoints: () => ({}),
 });

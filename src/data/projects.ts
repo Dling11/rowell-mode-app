@@ -147,6 +147,27 @@ export const projects: Project[] = [
     setup: ["Requires Android 10+, OpenGL ES 3.0 and a system that supports 32-bit ARM apps. A 64-bit-only Android system cannot install this APK.", "Install as MH3 - Low Spec. Its MH3_Low_Spec folder is separate from the standard app. Export and import saved progress if you want to transfer it.", "Select your compatible European/PAL game image and allow room for the image copy and extracted data. Realme C11 and Infinix X6532 sustained performance is not yet verified; faster gameplay is not guaranteed. A missing head in the PC character-selection preview remains under investigation."],
     releaseDate: null,
   },
+  {
+    id: "mdm",
+    name: "Mister Download Manager",
+    shortName: "MDM",
+    category: "Open-source tool · Official download",
+    summary: "An open-source download manager worth exploring.",
+    description: "An independent Rust download manager by Ahmed Nefzaoui and contributors, with segmented transfers, queues and an optional browser extension. This page links the original Windows release; it is not a Rowell-made app or the proprietary Internet Download Manager.",
+    status: "Released",
+    platforms: ["windows"],
+    version: "0.5.2",
+    releaseLabel: "Official upstream release · Under review",
+    repository: "https://github.com/anefzaoui/misterdownloadmanager",
+    release: "https://github.com/anefzaoui/misterdownloadmanager/releases/tag/v0.5.2",
+    credits: "https://github.com/anefzaoui/misterdownloadmanager/blob/main/LICENSE",
+    attribution: "Mister Download Manager is by Ahmed Nefzaoui and contributors, licensed GPL-3.0-or-later. Original copyright, license and third-party notices remain with the upstream project. This download is the unmodified official upstream package.",
+    packageLabels: { windows: "Official · Portable ZIP" },
+    highlights: ["Segmented downloads & queues", "Portable Windows package", "Optional browser integration"],
+    setup: ["Download the official portable ZIP and extract it into its own folder on Windows. Open misterdownloadmanager.exe from the extracted folder; its settings stay in the adjacent data folder.", "Browser integration needs the upstream installer rather than the portable package. It is optional; review its permissions before enabling the extension.", "Upstream Windows builds are unsigned. This project is still under review here; linking the official release does not mean a complete security audit or hands-on validation has been completed."],
+    resources: [{ title: "Upstream documentation", url: "https://github.com/anefzaoui/misterdownloadmanager/tree/main/docs", kind: "Documentation" }],
+    releaseDate: "2026-11-09T22:07:32Z",
+  },
 ];
 
 export function findProject(id: string) {

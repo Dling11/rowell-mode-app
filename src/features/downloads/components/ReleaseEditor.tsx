@@ -37,7 +37,7 @@ export function ReleaseEditor() {
       <h2>Approved download pointers</h2>
       <p>
         Manual pins only. Prereleases are supported; arbitrary “latest” releases
-        aren’t promoted. Low Spec has its own Android pin; the standard Tri pins stay separate. MH4U stays source only.
+        aren’t promoted. Low Spec and the two MH4U apps have separate Android pins. MDM links its official Windows package.
       </p>
       <QueryState
         loading={query.isLoading} fetching={query.isFetching}
@@ -90,7 +90,7 @@ export function ReleaseEditor() {
                 setPointer({
                   ...pointer,
                   projectId: e.target.value as ReleasePointer["projectId"],
-                  platform: (e.target.value === "mh-tri-low-spec" || e.target.value.startsWith("mh4u")) ? "android" : pointer.platform,
+                  platform: e.target.value === "mdm" ? "windows" : (e.target.value === "mh-tri-low-spec" || e.target.value.startsWith("mh4u")) ? "android" : pointer.platform,
                   tag: "",
                   asset: "",
                 })
@@ -99,6 +99,7 @@ export function ReleaseEditor() {
               <option value="mh-tri">MH Tri</option>
               <option value="mh4u-native">MH4U Native · Official</option><option value="mh4u">Monster Hunter 4 · Azahar</option><option value="mh-tri-low-spec">MH3 - Low Spec · ARM 32-bit</option>
               <option value="share-mode">Share Mode</option>
+              <option value="mdm">Mister Download Manager · Official</option>
             </select>
           </label>
           <label className="field">
@@ -113,7 +114,7 @@ export function ReleaseEditor() {
                 })
               }
             >
-              <option value="android">Android APK</option>
+              {pointer.projectId !== "mdm" && <option value="android">Android APK</option>}
               {pointer.projectId !== "mh-tri-low-spec" && !pointer.projectId.startsWith("mh4u") && <option value="windows">Windows ZIP</option>}
             </select>
           </label>

@@ -11,6 +11,7 @@ const pages = [
   "/projects/share-mode",
   "/projects/mh4u",
   "/projects/mh4u-native",
+  "/projects/mdm",
   "/updates",
   "/gallery",
   "/about",
@@ -52,9 +53,9 @@ test("landscape, zoom, reduced motion, filters and keyboard navigation", async (
       () => getComputedStyle(document.documentElement).scrollBehavior,
     ),
   ).toBe("auto");
-  await page.goto("/projects?platform=source");
+  await page.goto("/projects?q=Native");
   await expect(
-    page.getByRole("heading", { name: "Monster Hunter 4 — Rowell" }),
+    page.getByRole("heading", { name: "Monster Hunter 4 Ultimate — Native" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Share Mode", exact: true }),

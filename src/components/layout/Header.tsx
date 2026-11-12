@@ -12,7 +12,7 @@ export function Header() {
         <Link
           href="/"
           className={styles.brand}
-          aria-label={`${site.name} home`}
+          aria-label={`${site.name} / nikushimi home`}
         >
           <BrandMark size={38} />
           <span>

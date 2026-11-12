@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Swords } from "lucide-react";
+import { Download, Swords } from "lucide-react";
 
 const icons: Record<string, string> = {
   "mh-tri": "/images/mh-tri-icon.png",
@@ -26,6 +26,8 @@ export function ProjectIcon({
       height={size}
       priority={priority}
     />
+  ) : id === "mdm" ? (
+    <Download size={Math.round(size * 0.68)} aria-hidden="true" />
   ) : (
     <Swords size={Math.round(size * 0.68)} aria-hidden="true" />
   );
