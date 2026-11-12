@@ -5,6 +5,8 @@ const icons: Record<string, string> = {
   "mh-tri": "/images/mh-tri-icon.png",
   "mh-tri-low-spec": "/images/mh-tri-icon.png",
   "share-mode": "/images/share-mode-icon.svg",
+  "mh4u": "/images/mh4u-azahar-icon.png",
+  "mh4u-native": "/images/mh4u-native-icon.png",
 };
 
 export function ProjectIcon({

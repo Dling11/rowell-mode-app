@@ -162,6 +162,7 @@ export function OwnerSignIn({
         aria-busy={busy}
         onSubmit={(event) => {
           event.preventDefault();
+          if (blocked) return;
           if (mode === "pin") void signInPin();
           else {
             const data = new FormData(event.currentTarget);

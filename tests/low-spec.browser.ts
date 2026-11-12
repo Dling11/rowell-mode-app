@@ -6,7 +6,7 @@ for (const width of [320, 390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/downloads?platform=android");
     const list = page.getByRole("list", { name: "Project packages" });
-    await expect(list.getByRole("listitem")).toHaveCount(4);
+    await expect(list.getByRole("listitem")).toHaveCount(5);
     const low = list.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "MH3 - Low Spec", exact: true }) });
     await expect(low.getByText("32-bit · ARMv7 APK", { exact: true })).toBeVisible();
     await expect(low.getByText(/Experimental/)).toBeVisible();

@@ -24,7 +24,8 @@ export function DownloadPanel({
   policy: SitePolicy;
   relatedProject?: Project;
 }) {
-  const allowed = downloadsAllowed(policy, project.id);
+  const approvedPlatforms = project.platforms.filter(platform => !project.approvedTags || Boolean(project.approvedTags[platform]));
+  const allowed = downloadsAllowed(policy, project.id) && approvedPlatforms.length > 0;
   return (
     <section className={styles.panel} aria-label="Get this project">
       <p className="eyebrow">
@@ -46,7 +47,7 @@ export function DownloadPanel({
               : "Choose your platform. Packages are hosted on GitHub Releases."}
           </p>
           {allowed ? (
-            project.platforms.map((platform) => (
+            approvedPlatforms.map((platform) => (
               <DownloadLink
                 key={platform}
                 className={`button ${styles.download}`}
@@ -115,7 +116,7 @@ export function DownloadPanel({
         </a>
       )}
       {relatedProject && <div className={styles.related}>
-        <p>{project.experimental ? "Using a 64-bit Android device or a PC?" : "Need an Android 32-bit build?"}</p>
+        <p>{project.id.startsWith("mh4u") ? "Looking for the other MH4U app?" : project.experimental ? "Using a 64-bit Android device or a PC?" : "Need an Android 32-bit build?"}</p>
         <Link className="text-link" href={`/projects/${relatedProject.id}`}>
           {relatedProject.name} <ArrowUpRight size={13} />
         </Link>

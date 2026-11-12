@@ -9,6 +9,8 @@ import { ProjectVisual } from "@/features/projects/components/ProjectVisual";
 import { ProjectResources } from "@/features/projects/components/ProjectResources";
 import { getProjectWhatsNew } from "@/features/projects/model/release-notes";
 import { DownloadPanel } from "@/features/downloads/components/DownloadPanel";
+import { PhotoPreview } from "@/components/media/PhotoPreview";
+import { ProjectIcon } from "@/features/projects/components/ProjectIcon";
 import styles from "@/app/(site)/projects/[slug]/page.module.css";
 
 export async function generateMetadata({
@@ -44,6 +46,10 @@ export default async function ProjectPage({
         <div>
           <header className={styles.intro}>
             <p className="eyebrow">{project.category}</p>
+            {project.id.startsWith("mh4u") && <nav className={styles.editions} aria-label="MH4U app edition">
+              <Link href="/projects/mh4u-native" aria-current={project.id === "mh4u-native" ? "page" : undefined}><ProjectIcon id="mh4u-native" size={30} /> Native</Link>
+              <Link href="/projects/mh4u" aria-current={project.id === "mh4u" ? "page" : undefined}><ProjectIcon id="mh4u" size={30} /> Azahar</Link>
+            </nav>}
             <h1>{project.name}</h1>
             <p>{project.description}</p>
           </header>
@@ -53,11 +59,11 @@ export default async function ProjectPage({
               <span key={p}>{p === "android" ? "Android" : "Windows"}</span>
             ))}
           </div>
-          <ProjectVisual
+          {project.id.startsWith("mh4u") && project.coverImage ? <PhotoPreview className={styles.gameplay} src={project.coverImage.src} alt={project.coverImage.alt} caption="Gameplay from the Android setup tutorial. Menus may differ in newer releases." fit="contain" /> : <ProjectVisual
             id={project.id}
             large
             coverImage={project.coverImage}
-          />
+          />}
           <section className={styles.section}>
             <h2>{whatsNew ? `What's new in ${whatsNew.version}` : "The small details matter."}</h2>
             <ul className={styles.highlights}>

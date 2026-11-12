@@ -117,7 +117,7 @@ export async function getPublicProjects(): Promise<Project[]> {
               src: `/media/${cover.id}`,
               alt: String(cover.alt || project.name),
             }
-          : undefined,
+          : project.coverImage,
       };
     });
   } catch {

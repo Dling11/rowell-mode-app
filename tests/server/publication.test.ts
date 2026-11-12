@@ -237,7 +237,7 @@ test("project release notes follow the approved platform versions, including old
     assert.equal(project.version, null);
     assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases");
     assert.deepEqual(project.approvedTags, { android: "v1.0.4", windows: "v1.1.0" });
-    assert.equal((await getPublicProjects()).find((project) => project.id === "mh4u")!.release, null);
+    assert.equal((await getPublicProjects()).find((project) => project.id === "mh4u")!.release, "https://github.com/Dling11/MH4-ULTIMATE/releases/tag/rowell-1.0.17");
   } finally {
     global.hubMongoPromise = oldPromise;
     for (const [key, value] of Object.entries({ MONGODB_URI: oldEnv.uri, MONGODB_DB: oldEnv.db })) {
@@ -275,7 +275,7 @@ test("Low Spec stays unpublished without its own pin and cannot change standard 
     assert.equal((await resolve(low.projectId)).status, 503);
     assert.equal(calls, 0);
     assert.equal((await resolve(low.projectId, "windows")).status, 404);
-    assert.equal((await resolve("mh4u")).status, 404);
+    assert.equal((await resolve("mh4u")).status, 503);
     releases.push({ projectId: low.projectId, platform: "android", pointer: low });
     const projects = await getPublicProjects();
     const lowProject = projects.find(p => p.id === low.projectId)!;

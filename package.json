@@ -25,6 +25,7 @@
     "@reduxjs/toolkit": "^2.13.0",
     "better-auth": "^1.7.14",
     "cloudinary": "^2.11.0",
+    "fflate": "0.8.3",
     "lucide-react": "^1.64.0",
     "mongodb": "^7.7.0",
     "motion": "^14.8.0",

@@ -1,0 +1,291 @@
+.workspace,
+.shared {
+  display: grid;
+  gap: 26px;
+  min-width: 0;
+}
+.shared {
+  max-width: 920px;
+  margin: 50px auto;
+}
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.heading h1 {
+  margin: 10px 0 14px;
+  font-weight: 500;
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -0.035em;
+}
+.heading p:last-child {
+  color: var(--muted);
+  max-width: 650px;
+}
+.heading > svg {
+  color: var(--blue);
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.folders,
+.panel,
+.sharing {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 0;
+}
+.folders {
+  padding: 20px;
+  display: grid;
+  gap: 24px;
+}
+.folders h2,
+.sharing h2 {
+  font-size: 17px;
+  font-weight: 500;
+}
+.folders form,
+.folders nav,
+.main,
+.sharing,
+.invitation {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.folders nav {
+  gap: 6px;
+}
+.folders nav button {
+  text-align: left;
+  display: grid;
+  gap: 3px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  padding: 12px;
+  overflow-wrap: anywhere;
+}
+.folders nav button[aria-current] {
+  border-color: var(--blue);
+  background: var(--surface-raised);
+}
+.folders nav small,
+.hint,
+.folderHeader small,
+.sharing p,
+.sharing small,
+.fileDetails span,
+.fileDetails time,
+.fileDetails small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.sharing p {
+  margin-top: 8px;
+  max-width: 680px;
+}
+.invitation {
+  padding: 16px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  border-radius: 8px;
+}
+.invitation > button {
+  justify-self: start;
+}
+.invitation small {
+  font-size: 12px;
+  color: var(--amber);
+}
+.folderHeader {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.folderHeader h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  margin-top: 8px;
+  font-size: 24px;
+  overflow-wrap: anywhere;
+}
+.folderHeader svg {
+  flex-shrink: 0;
+  color: var(--blue);
+}
+.panel > .hint {
+  max-width: 690px;
+}
+.upload {
+  display: grid;
+  gap: 16px;
+  padding: 24px 0;
+}
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.upload > button {
+  justify-self: start;
+}
+.selection {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px dashed var(--blue);
+  border-radius: 8px;
+  padding: 14px;
+  min-width: 0;
+}
+.selection div {
+  display: grid;
+  min-width: 0;
+}
+.selection strong {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.selection small {
+  color: var(--muted);
+}
+.iconButton {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  flex-shrink: 0;
+}
+.iconButton:hover {
+  border-color: var(--blue);
+  background: var(--surface-raised);
+}
+.backups {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  margin-top: 8px;
+}
+.backups h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.file {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+}
+.fileDetails {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.fileDetails strong,
+.fileDetails small {
+  overflow-wrap: anywhere;
+}
+.fileDetails details {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.fileDetails summary {
+  cursor: pointer;
+}
+.fileDetails code {
+  display: block;
+  max-width: 100%;
+  font-size: 10px;
+  margin-top: 6px;
+  word-break: break-all;
+}
+.empty {
+  padding: 45px 20px;
+  text-align: center;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+.empty h2 {
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 500;
+}
+.success {
+  color: var(--green);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .folders nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .folders nav button {
+    min-width: 120px;
+  }
+  .folders form {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
+@media (max-width: 620px) {
+  .panel,
+  .sharing,
+  .folders {
+    padding: 18px;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .folderHeader,
+  .file {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .folders form {
+    grid-template-columns: 1fr;
+  }
+  .heading > svg {
+    display: none;
+  }
+  .shared {
+    margin: 30px auto;
+  }
+}
+.sharing :global(button.text-link) {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}

@@ -1,6 +1,34 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 const login = "http://127.0.0.1:3105/admin/login";
+test("desktop PIN accepts the keyboard immediately and after keypad clicks", async ({ page }) => {
+  let submitted = "";
+  await page.route("**/api/auth/sign-in/owner-pin", async route => {
+    submitted = route.request().postDataJSON().pin;
+    await route.fulfill({ status: 401, json: { message: "Isolated test" } });
+  });
+  await page.goto(login);
+  const username = page.getByLabel("Username", { exact: true });
+  await username.fill("keyboard123");
+  await expect(username).toHaveValue("keyboard123");
+  await page.getByRole("button", { name: "PIN", exact: true }).click();
+  const input = page.getByLabel("Owner PIN", { exact: true });
+  await expect(input).toBeFocused();
+  await page.keyboard.type("123");
+  await page.keyboard.press("Numpad4");
+  await expect(input).toHaveValue("1234");
+  await page.getByRole("button", { name: "Digit 5", exact: true }).click();
+  await page.keyboard.type("6");
+  await page.keyboard.press("Backspace");
+  await expect(input).toHaveValue("12345");
+  // Keyboard navigation may leave focus on an on-screen key.
+  await page.getByRole("button", { name: "Digit 7", exact: true }).focus();
+  await page.keyboard.type("8");
+  await expect(input).toHaveValue("123458");
+  await page.keyboard.press("Enter");
+  await expect.poll(() => submitted).toBe("123458");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("PIN sign-in failed");
+});
 test("phone PIN keypad supports typing, zero, delete and clear without revealing its value", async ({
   page,
 }) => {

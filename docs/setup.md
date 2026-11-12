@@ -100,8 +100,9 @@ cannot identify every automated visitor. No visitor IP or per-visitor history is
 
 The dashboard supports manual approval and holds. Automatic approved manifests can
 be integrated when a project's release process supplies a real approval manifest;
-source pushes and `/releases/latest` are not used to promote packages. MH4U has no
-download route. Adding a future public package requires an explicit catalog change.
+source pushes and `/releases/latest` are not used to promote packages. MH4U has two
+Android approvals: `mh4u-native` for khorne-hub’s official Native APK and `mh4u`
+for the customized Azahar app in Dling11/MH4-ULTIMATE. They are never interchangeable.
 
 `SITE_MODE=downloads-paused` or `SITE_MODE=maintenance` forces a stricter emergency
 mode. It cannot loosen the stored policy. Maintenance returns HTTP 503 and keeps
@@ -111,6 +112,31 @@ readable with downloads disabled. These controls cannot revoke existing public U
 installed apps or copies already downloaded.
 
 ## Cloudinary
+
+### Private game saves
+
+`/admin/saves` stores exported save backups separately from the photo library.
+Create one folder per person, then upload a save ZIP, a raw save file or the
+exported save folder. Folder uploads become ZIPs in the browser. Backups are
+limited to 4 MB each, 25 per folder, and 100 folders per owner. ZIP directories
+are checked without extracting files; game images, apps, unsafe paths and
+oversized archives are rejected. Validation cannot prove in-game progress is valid.
+
+The server uploads saves as authenticated Cloudinary `raw` assets using the
+existing server credentials and folder prefix. This does not change the signed
+image preset. Authorized downloads are proxied, attachment-only, never cached,
+and checked against the stored SHA-256. Confirm that private raw ZIP upload and
+download work in the configured product environment before enabling production use.
+
+An optional invitation grants read/upload access to one folder for seven days.
+The secret stays in the URL fragment and an Authorization header; MongoDB stores
+only its hash. Replacing or revoking the link blocks subsequent requests, without
+deleting saves. Invitation holders cannot enter the owner workspace, rename
+folders or delete backups. Maintenance or unavailable policy blocks shared access.
+No game app is changed by a website upload; restoration still happens through
+that app’s Import save tools. Keep another safe copy of important exports.
+
+### Photo uploads
 
 Set the server-only cloud name, API key/secret and a dedicated media folder. Check
 credentials, the account folder mode and an existing configured preset with:

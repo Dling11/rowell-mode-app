@@ -30,12 +30,21 @@ test("only an exact published asset in the approved repository resolves, includi
     assert.throws(()=>validatePublishedAsset({...release,assets:[{...release.assets[0],browser_download_url:badUrl}]},pointer));
   }
 });
-test("unpublished projects and mismatched platform packages cannot be approved",()=>{
-  assert.equal(releasePointerSchema.safeParse({...pointer,projectId:"mh4u"}).success,false);
+test("unknown projects and mismatched platform packages cannot be approved",()=>{
+  assert.equal(releasePointerSchema.safeParse({...pointer,projectId:"unknown"}).success,false);
   assert.equal(releasePointerSchema.safeParse({...pointer,platform:"windows"}).success,false);
   assert.equal(releasePointerSchema.safeParse({...pointer,tag:"../../latest"}).success,false);
-  assert.equal(projects.find(p=>p.id==="mh4u")?.release,null);
+  assert.equal(projects.find(p=>p.id==="mh4u")?.version,"1.0.17");
   assert.equal(projects.find(p=>p.id==="share-mode")?.version,"1.1.0");
+});
+test("MH4U editions resolve only their own Android release repositories",()=>{
+  for (const [projectId,repo] of [["mh4u","Dling11/MH4-ULTIMATE"],["mh4u-native","khorne-hub/4u-native"]] as const) {
+    const p = releasePointerSchema.parse({ projectId, platform: "android", tag: "v1", asset: "app.apk" });
+    const asset = {...release.assets[0], name: "app.apk", browser_download_url: `https://github.com/${repo}/releases/download/v1/app.apk`};
+    assert.equal(validatePublishedAsset({...release,tag_name:"v1",assets:[asset]},p).url,asset.browser_download_url);
+    assert.throws(()=>validatePublishedAsset({...release,tag_name:"v1",assets:[{...asset,browser_download_url: asset.browser_download_url.replace(repo,"wrong/project")} ]},p));
+    assert.equal(releasePointerSchema.safeParse({...p,platform:"windows",asset:"app.zip"}).success,false);
+  }
 });
 test("click accounting excludes HEAD, prefetch and obvious automation",()=>{
   const request=(headers:Record<string,string>={},method="GET")=>new Request("https://hub.example/download/mh-tri/android",{method,headers:{"user-agent":"Mozilla/5.0",...headers}});

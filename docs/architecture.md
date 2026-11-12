@@ -50,6 +50,15 @@ use `server-only`. MongoDB queries stay in repositories, while provider services
 authorize destinations and verify external results. Shared styles and DTOs do not
 depend on a particular feature.
 
+The `game-saves` feature is a separate private library, not public gallery media.
+Its owner endpoints use the existing session and Origin guards. Invitation
+endpoints verify a high-entropy token against a stored hash, folder scope and
+expiry on every request. Each folder stores bounded backup metadata; a single
+MongoDB update atomically checks invitation validity, upload IDs and capacity.
+Cloudinary handles authenticated raw storage; the server checks download hashes
+and never exposes provider URLs in the library DTOs. Client ZIP packing loads
+only after choosing a save folder, outside the public portfolio bundle.
+
 Private notes and public updates use separate records and endpoints. Every owner
 API checks the session on the server. Uploads require an owner-authorized signature,
 go directly to Cloudinary with authenticated delivery, and enter the private library

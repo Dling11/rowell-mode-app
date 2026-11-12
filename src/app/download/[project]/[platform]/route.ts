@@ -1,6 +1,6 @@
 import { getSitePolicy } from "@/server/site-policy/service";
 import { downloadsAllowed } from "@/features/site-settings/model/policy";
-import { shouldCountRequest } from "@/features/downloads/model/release-schema";
+import { shouldCountRequest, repositories } from "@/features/downloads/model/release-schema";
 import { resolveApprovedRelease } from "@/server/releases/service";
 import { getDatabase } from "@/server/db/client";
 import { downloadUnavailableHtml } from "@/server/site-policy/maintenance";
@@ -11,7 +11,7 @@ const headers={"Cache-Control":"no-store","X-Robots-Tag":"noindex"};
 type Context={params:Promise<{project:string;platform:string}>};
 async function download(request:Request,context:Context) {
   const {project,platform}=await context.params;
-  if (!["mh-tri","mh-tri-low-spec","share-mode"].includes(project) || !["android","windows"].includes(platform) || (project === "mh-tri-low-spec" && platform !== "android")) return Response.json({error:"No approved download exists for this project and platform."},{status:404,headers});
+  if (!Object.hasOwn(repositories,project) || !["android","windows"].includes(platform) || ((project === "mh-tri-low-spec" || project.startsWith("mh4u")) && platform !== "android")) return Response.json({error:"No approved download exists for this project and platform."},{status:404,headers});
   const unavailable=()=>request.headers.get("accept")?.includes("text/html")
     ? new Response(downloadUnavailableHtml(),{status:503,headers:{...headers,"Retry-After":"300","Content-Type":"text/html; charset=utf-8"}})
     : Response.json({error:"Downloads are temporarily unavailable. Please check back soon."},{status:503,headers:{...headers,"Retry-After":"300"}});

@@ -40,7 +40,7 @@ test("spotlight rotates, pauses and supports manual project selection", async ({
     .getByRole("button", { name: "Next spotlight project" })
     .click();
   await expect(
-    spotlight.getByRole("heading", { name: "Monster Hunter 4 — Rowell" }),
+    spotlight.getByRole("heading", { name: "Monster Hunter 4 Ultimate — Native" }),
   ).toBeVisible();
   await spotlight
     .getByRole("button", { name: "Previous spotlight project" })
@@ -78,12 +78,12 @@ test("download list filters public packages and keeps source-only builds unavail
 }) => {
   await page.goto("/downloads");
   const list = page.getByRole("list", { name: "Project packages" });
-  await expect(list.getByRole("listitem")).toHaveCount(6);
+  await expect(list.getByRole("listitem")).toHaveCount(7);
   await expect(
     list.getByRole("button", { name: /download is unavailable/ }),
-  ).toHaveCount(4);
+  ).toHaveCount(6);
   await expect(
-    page.getByText("In testing · Source only", { exact: true }),
+    page.getByRole("heading", { name: "Monster Hunter 4 — Azahar", exact: true }),
   ).toBeVisible();
   await expect(page.locator('a[href^="/download/mh4u/"]')).toHaveCount(0);
   await page

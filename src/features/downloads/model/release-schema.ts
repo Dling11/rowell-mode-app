@@ -1,12 +1,13 @@
 import { z } from "zod";
 export const releasePointerSchema = z
   .object({
-    projectId: z.enum(["mh-tri", "mh-tri-low-spec", "share-mode"]),
+    projectId: z.enum(["mh-tri", "mh-tri-low-spec", "share-mode", "mh4u", "mh4u-native"]),
     platform: z.enum(["android", "windows"]),
     tag: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/),
     asset: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/),
   })
   .strict()
+  .refine(pointer => !pointer.projectId.startsWith("mh4u") || pointer.platform === "android", "MH4U packages are Android only.")
   .refine(
     (pointer) =>
       pointer.platform === "android"
@@ -43,6 +44,8 @@ export const repositories = {
   "mh-tri": "Dling11/monster_hunter_tri_emulator",
   "mh-tri-low-spec": "Dling11/monster_hunter_tri_emulator",
   "share-mode": "Dling11/share-me-rowell",
+  "mh4u": "Dling11/MH4-ULTIMATE",
+  "mh4u-native": "khorne-hub/4u-native",
 } as const;
 
 export function validatePublishedAsset(

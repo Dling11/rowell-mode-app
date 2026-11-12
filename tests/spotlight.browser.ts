@@ -21,7 +21,9 @@ test("with animations Off visitors can enable a full loop and keep playback afte
   await expect(carousel).toHaveAttribute("data-playing", "true");
   for (const name of [
     "Share Mode",
-    "Monster Hunter 4 — Rowell",
+    "Monster Hunter 4 Ultimate — Native",
+    "Monster Hunter 4 — Azahar",
+    "MH3 - Low Spec",
     "MH Tri — Rowell",
   ]) {
     await page.clock.fastForward(4900);

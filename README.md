@@ -30,6 +30,9 @@ and [project credits](docs/credits.md).
 
 The owner can install the hosted app after signing in through `/install`.
 The app opens the protected dashboard; the public portfolio remains at `/`.
+The owner workspace includes a private Game saves library with a folder for each
+person. Optional seven-day invitation links permit uploads and downloads only in
+that folder. Save archives are limited to 4 MB; game images and APKs are excluded.
 Phone installation requires an HTTPS address. Offline mode shows a reconnect screen;
 notes, sign-in, uploads and downloads require an internet connection.
 

@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
       ],
     }, {
+      source: "/saves/:path*",
+      headers: [
+        { key: "Cache-Control", value: "private, no-store" },
+        { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        { key: "Referrer-Policy", value: "no-referrer" },
+      ],
+    }, {
       source: "/sw.js",
       headers: [
         { key: "Content-Type", value: "application/javascript; charset=utf-8" },

@@ -10,6 +10,7 @@ const pages = [
   "/projects/mh-tri",
   "/projects/share-mode",
   "/projects/mh4u",
+  "/projects/mh4u-native",
   "/updates",
   "/gallery",
   "/about",
@@ -78,20 +79,20 @@ for (const route of pages)
       .analyze();
     expect(result.violations).toEqual([]);
   });
-test("source-only project has no download action and known releases remain labelled", async ({
+test("MH4U releases stay unavailable when services are disconnected", async ({
   page,
 }) => {
   await page.goto("/projects/mh4u");
   await expect(page.locator('a[href^="/download/"]')).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: /Explore source code/ }),
+    page.getByRole("link", { name: /^Source code/ }),
   ).toBeVisible();
   await page.goto("/projects/share-mode");
   await expect(
     page.getByText("Public preview", { exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("Version 1.0.4", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Read release notes/ })).toHaveAttribute("href", "https://github.com/Dling11/share-me-rowell/releases/tag/v1.0.4");
+  await expect(page.getByText("Version 1.1.0", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Read release notes/ })).toHaveAttribute("href", "https://github.com/Dling11/share-me-rowell/releases/tag/v1.1.0");
 });
 test("public content and project navigation work before JavaScript", async ({
   browser,
@@ -209,7 +210,7 @@ test("missing policy fails closed; no invented or visitor-controlled redirects",
     expect(response.headers().location).toBeUndefined();
     expect(response.headers()["cache-control"]).toBe("no-store");
   }
-  expect((await request.get("/download/mh4u/android")).status()).toBe(404);
+  expect((await request.get("/download/mh4u/android")).status()).toBe(503);
   expect((await request.head("/download/mh-tri/android")).status()).toBe(503);
   const browserResponse = await request.get("/download/mh-tri/android", {
     headers: { Accept: "text/html" },
