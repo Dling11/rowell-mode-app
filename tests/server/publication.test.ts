@@ -206,8 +206,8 @@ test("project release notes follow the approved platform versions, including old
   const oldEnv = { uri: process.env.MONGODB_URI, db: process.env.MONGODB_DB };
   const oldPromise = global.hubMongoPromise;
   const releases: Row[] = [
-    { projectId: "share-mode", platform: "android", pointer: { projectId: "share-mode", platform: "android", tag: "v1.2.14", asset: "Share-Mode-1.2.7.apk" } },
-    { projectId: "share-mode", platform: "windows", pointer: { projectId: "share-mode", platform: "windows", tag: "v1.2.14", asset: "Share-Mode-Windows-1.2.14.zip" } },
+    { projectId: "share-mode", platform: "android", pointer: { projectId: "share-mode", platform: "android", tag: "v1.2.15", asset: "Share-Mode-1.2.8.apk" } },
+    { projectId: "share-mode", platform: "windows", pointer: { projectId: "share-mode", platform: "windows", tag: "v1.2.15", asset: "Share-Mode-Windows-1.2.14.zip" } },
   ];
   const db = memoryDatabase({ releases });
   process.env.MONGODB_URI = "mongodb://isolated.invalid";
@@ -215,11 +215,11 @@ test("project release notes follow the approved platform versions, including old
   global.hubMongoPromise = Promise.resolve({ db: () => db } as unknown as MongoClient);
   try {
     let project = (await getPublicProjects()).find((project) => project.id === "share-mode")!;
-    assert.equal(project.version, "1.2.14");
-    assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases/tag/v1.2.14");
+    assert.equal(project.version, "1.2.15");
+    assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases/tag/v1.2.15");
     assert.equal(project.whatsNew?.version, project.version);
-    assert.equal(project.releaseLabel, "Public preview · Windows 1.2.14 / Android 1.2.7");
-    assert.match(project.packageLabels?.android || "", /^v1\.2\.7 /);
+    assert.equal(project.releaseLabel, "Public preview · Windows 1.2.14 / Android 1.2.8");
+    assert.match(project.packageLabels?.android || "", /^v1\.2\.8 /);
     assert.match(project.packageLabels?.windows || "", /^v1\.2\.14 /);
 
     for (const release of releases) {
@@ -235,12 +235,12 @@ test("project release notes follow the approved platform versions, including old
     assert.match(project.packageLabels?.android || "", /^v1\.0\.4 /);
     assert.match(project.packageLabels?.windows || "", /^v1\.0\.4 /);
 
-    (releases[1].pointer as Record<string, string>).tag = "v1.2.14";
+    (releases[1].pointer as Record<string, string>).tag = "v1.2.15";
     (releases[1].pointer as Record<string, string>).asset = "Share-Mode-Windows-1.2.14.zip";
     project = (await getPublicProjects()).find((project) => project.id === "share-mode")!;
     assert.equal(project.version, null);
     assert.equal(project.release, "https://github.com/Dling11/share-me-rowell/releases");
-    assert.deepEqual(project.approvedTags, { android: "v1.0.4", windows: "v1.2.14" });
+    assert.deepEqual(project.approvedTags, { android: "v1.0.4", windows: "v1.2.15" });
     assert.match(project.packageLabels?.android || "", /^v1\.0\.4 /);
     assert.match(project.packageLabels?.windows || "", /^v1\.2\.14 /);
     assert.equal((await getPublicProjects()).find((project) => project.id === "mh4u")!.release, "https://github.com/Dling11/MH4-ULTIMATE/releases/tag/rowell-1.0.17");

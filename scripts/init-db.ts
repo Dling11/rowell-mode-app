@@ -38,13 +38,13 @@ async function main() {
     {
       projectId: "share-mode",
       platform: "android",
-      tag: "v1.2.14",
-      asset: "Share-Mode-1.2.7.apk",
+      tag: "v1.2.15",
+      asset: "Share-Mode-1.2.8.apk",
     },
     {
       projectId: "share-mode",
       platform: "windows",
-      tag: "v1.2.14",
+      tag: "v1.2.15",
       asset: "Share-Mode-Windows-1.2.14.zip",
     },
   ];

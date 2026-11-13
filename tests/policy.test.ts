@@ -35,7 +35,7 @@ test("unknown projects and mismatched platform packages cannot be approved",()=>
   assert.equal(releasePointerSchema.safeParse({...pointer,platform:"windows"}).success,false);
   assert.equal(releasePointerSchema.safeParse({...pointer,tag:"../../latest"}).success,false);
   assert.equal(projects.find(p=>p.id==="mh4u")?.version,"1.0.17");
-  assert.equal(projects.find(p=>p.id==="share-mode")?.version,"1.2.14");
+  assert.equal(projects.find(p=>p.id==="share-mode")?.version,"1.2.15");
 });
 test("MH4U editions resolve only their own Android release repositories",()=>{
   for (const [projectId,repo] of [["mh4u","Dling11/MH4-ULTIMATE"],["mh4u-native","khorne-hub/4u-native"]] as const) {
