@@ -90,10 +90,10 @@ test("MH4U releases stay unavailable when services are disconnected", async ({
   ).toBeVisible();
   await page.goto("/projects/share-mode");
   await expect(
-    page.getByText("Public preview", { exact: true }),
+    page.getByText("Public preview · Windows 1.2.14 / Android 1.2.7", { exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("Version 1.1.0", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Read release notes/ })).toHaveAttribute("href", "https://github.com/Dling11/share-me-rowell/releases/tag/v1.1.0");
+  await expect(page.getByText("Version 1.2.14", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Read release notes/ })).toHaveAttribute("href", "https://github.com/Dling11/share-me-rowell/releases/tag/v1.2.14");
 });
 test("public content and project navigation work before JavaScript", async ({
   browser,

@@ -62,6 +62,7 @@ export async function getPublicProjects(): Promise<Project[]> {
         .safeParse(record?.resources);
       const cover = covers.find((c) => c.id === record?.coverMediaId);
       const approvedTags: Project["approvedTags"] = {};
+      const packageLabels = { ...project.packageLabels };
       for (const release of releases) {
         const parsed = releasePointerSchema.safeParse(release.pointer);
         if (
@@ -69,8 +70,16 @@ export async function getPublicProjects(): Promise<Project[]> {
           parsed.data.projectId === project.id &&
           parsed.data.projectId === release.projectId &&
           parsed.data.platform === release.platform
-        )
+        ) {
           approvedTags[parsed.data.platform] = parsed.data.tag;
+          if (project.id === "share-mode") {
+            const platform = parsed.data.platform;
+            const version = parsed.data.asset.match(platform === "android"
+              ? /^Share-Mode-(\d+\.\d+\.\d+)\.apk$/
+              : /^Share-Mode-Windows-(\d+\.\d+\.\d+)\.zip$/)?.[1];
+            if (version) packageLabels[platform] = `v${version} · ${platform === "android" ? "Android 10+ APK" : "64-bit portable ZIP"}`;
+          }
+        }
       }
       const tags = Object.values(approvedTags);
       const sameTag = tags.length > 0 && tags.every((tag) => tag === tags[0]);
@@ -80,6 +89,7 @@ export async function getPublicProjects(): Promise<Project[]> {
       return {
         ...project,
         approvedTags,
+        packageLabels,
         version: tags.length
           ? sameTag
             ? tags[0].replace(/^rowell-|^low-spec-|^v/, "")
